@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>模块化编程基础概念 - AI全栈开发课程</title>
+		<meta name="description" content="理解项目、模块、包、函数的核心概念">
+
+		<link rel="stylesheet" href="../dist/reset.css">
+		<link rel="stylesheet" href="../dist/reveal.css">
+		<link rel="stylesheet" href="../dist/theme/blood.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+		
+		<!-- Font Awesome 图标库 -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<!-- 🔥 爆炸特效样式库 - 自动引入，让每个页面都有魔法！ -->
+		<link rel="stylesheet" href="../effect/explose/explosion-effects.css">
+        <!-- 自定义星星特效样式 -->
+		<style>
+		
+			
+		
+			
+		
+			
+			/* 让reveal.js的内容层级更高 */
+			.reveal {
+				position: relative;
+				z-index: 10;
+			}
+			
+			/* 摄像头窗口样式 - 我们的魔法镜子 */
+			.camera-container {
+				position: fixed;
+				bottom: 10px;
+				left: 10px;
+				width: 200px;
+				height: 150px;
+				background: #000;
+				border: 2px solid #333;
+				border-radius: 10px;
+				overflow: hidden;
+				z-index: 1000;
+				transition: all 0.3s ease;
+				box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+			}
+			
+			/* 放大状态的摄像头窗口 */
+			.camera-container.enlarged {
+				width: 400px;
+				height: 300px;
+				bottom: 50px;
+				left: 50px;
+			}
+			
+			/* 摄像头视频元素 */
+			.camera-video {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 7px;
+				transition: all 0.3s ease;
+				/* 默认镜像效果 - 就像真正的镜子 */
+				transform: scaleX(-1);
+			}
+			
+			/* 取消镜像效果 */
+			.camera-video.no-mirror {
+				transform: scaleX(1);
+			}
+			
+			/* 控制按钮容器 - 只在hover时显示 */
+			.camera-controls {
+				position: absolute;
+				top: 5px;
+				right: 5px;
+				display: flex;
+				gap: 5px;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				pointer-events: none;
+			}
+			
+			/* 摄像头容器被hover时显示控制按钮 */
+			.camera-container:hover .camera-controls {
+				opacity: 1;
+				pointer-events: auto;
+			}
+			
+			/* 控制按钮样式 */
+			.control-btn {
+				width: 25px;
+				height: 25px;
+				background: rgba(0,0,0,0.7);
+				border: none;
+				border-radius: 50%;
+				color: white;
+				cursor: pointer;
+				font-size: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: all 0.2s;
+			}
+			
+			.control-btn:hover {
+				background: rgba(0,0,0,0.9);
+				transform: scale(1.1);
+			}
+			
+			/* 激活状态的按钮 */
+			.control-btn.active {
+				background: #4CAF50;
+			}
+			
+			/* 隐藏状态 */
+			.camera-container.hidden {
+				display: none;
+			}
+			
+			/* 启动摄像头的按钮 */
+			.start-camera-btn {
+				position: fixed;
+				bottom: 20px;
+				left: 20px;
+				padding: 10px 15px;
+				/* background: #4CAF50; */
+				/* color: white; */
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 1000;
+				font-size: 14px;
+				transition: background 0.3s;
+			}
+			
+			/* .start-camera-btn:hover {
+				background: #45a049;
+			} */
+			
+			.start-camera-btn.hidden {
+				display: none;
+			}
+			
+			/* 返回首页按钮 */
+			.back-home-btn {
+				position: fixed;
+				top: 20px;
+				left: 20px;
+				padding: 8px 12px;
+				background: rgba(0,0,0,0.7);
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 1001;
+				font-size: 14px;
+				text-decoration: none;
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				transition: all 0.3s ease;
+				backdrop-filter: blur(10px);
+			}
+			
+			.back-home-btn:hover {
+				background: rgba(0,0,0,0.9);
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- 返回首页按钮 -->
+		<a href="/ppt/index.html" class="back-home-btn">
+			🏠
+		</a>
+
+        	<!-- 启动摄像头按钮 -->
+		<button class="start-camera-btn" id="startCameraBtn">📷</button>
+		
+		<!-- 摄像头窗口 - 我们的魔法镜子 -->
+		<div class="camera-container hidden" id="cameraContainer">
+			<video class="camera-video" id="cameraVideo" autoplay muted></video>
+			<div class="camera-controls">
+				<button class="control-btn" id="enlargeBtn" title="放大/缩小">⛶</button>
+				<button class="control-btn active" id="mirrorBtn" title="取消镜像">🪞</button>
+				<button class="control-btn" id="closeBtn" title="关闭摄像头">✕</button>
+			</div>
+		</div>
+		
+		<div class="reveal">
+			<div class="slides"> 
+    <section>
+        <h2>💻 模块化编程基础概念</h2>
+        <h3>项目、模块、包、函数</h3>
+        <p>
+            <small>讲师：nathan</small>
+        </p>
+    </section>
+
+    <section>
+        <section>
+            <h2>📋 今天要学的核心概念</h2>
+            <ul>
+                <li>📁 什么是项目？</li>
+                <li>📄 什么是模块？</li>
+                <li>📦 什么是包？</li>
+                <li>⚙️ 什么是函数？</li>
+                <li>🔄 导入导出怎么用？</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📁 什么是项目？</h2>
+        </section>
+        
+        <section>
+            <h3>ℹ️ 项目的定义</h3>
+            <ul>
+                <li>项目就是一个大文件夹</li>
+                <li>里面放着做软件需要的所有文件</li>
+                <li>有一个主文件夹和一个开始文件</li>
+                <li>开始文件就是程序运行的第一个文件</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>🗂️ 项目长什么样？</h3>
+            <ul>
+                <li><strong>📂 主文件夹</strong> - 最大的那个文件夹</li>
+                <li><strong>▶️ 开始文件</strong> - 程序第一个运行的文件</li>
+                <li><strong>📁 小文件夹</strong> - 把不同功能的代码分开放</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📄 什么是模块？</h2>
+        </section>
+        
+        <section>
+            <h3>ℹ️ 模块的定义</h3>
+            <ul>
+                <li>把代码分成很多个小文件</li>
+                <li>每个小文件负责一个功能</li>
+                <li>这样代码看起来更整齐</li>
+                <li>不用把所有代码都写在一个文件里</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>🔄 怎么用别的文件？</h3>
+            <ul>
+                <li><strong>⬆️ 导出</strong> - 把功能分享给别人用</li>
+                <li><strong>⬇️ 导入</strong> - 拿别人的功能来用</li>
+                <li><strong>🔗 require</strong> - 另一种拿功能的方法</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📦 什么是包？</h2>
+        </section>
+        
+        <section>
+            <h3>ℹ️ 包的定义</h3>
+            <ul>
+                <li>别人写好的代码，分享给大家用</li>
+                <li>你可以直接在自己的项目里用</li>
+                <li>不用重复写相同的功能</li>
+                <li>有专门的工具帮你管理这些包</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>👍 用包有什么好处？</h3>
+            <ul>
+                <li>⏰ 省时间</li>
+                <li>🛡️ 用别人测试过的好代码</li>
+                <li>🎯 专心做自己的功能</li>
+                <li>👥 大家一起分享代码</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>⚙️ 什么是函数？</h2>
+        </section>
+        
+        <section>
+            <h3>ℹ️ 函数的定义</h3>
+            <ul>
+                <li>把一个功能包装成一个小盒子</li>
+                <li>可以给这个盒子传东西进去</li>
+                <li>盒子处理完后可以给你结果</li>
+                <li>这个盒子可以重复使用</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>✨ 函数的好处</h3>
+            <ul>
+                <li><strong>🔄 重复使用</strong> - 写一次，到处用</li>
+                <li><strong>👁️ 看得清楚</strong> - 功能分得很清楚</li>
+                <li><strong>🐛 好找问题</strong> - 出错了马上知道在哪</li>
+                <li><strong>🔧 好修改</strong> - 改一个地方就够了</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>⭐ 为什么要分模块？</h2>
+        </section>
+        
+        <section>
+            <h3>💡 模块化的好处</h3>
+            <ul>
+                <li><strong>🗂️ 代码整齐</strong> - 看起来清清楚楚</li>
+                <li><strong>🧩 功能分开</strong> - 不同功能分开做</li>
+                <li><strong>♻️ 到处能用</strong> - 写好的代码到处用</li>
+                <li><strong>👥 大家一起做</strong> - 不同人做不同功能</li>
+                <li><strong>❤️ 好维护</strong> - 改东西不会影响别的</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📝 总结</h2>
+        </section>
+        
+        <section>
+            <h3>✅ 四个重要概念</h3>
+            <ul>
+                <li><strong>📁 项目</strong> - 代码的组织单位</li>
+                <li><strong>📄 模块</strong> - 独立功能的代码文件</li>
+                <li><strong>📦 包</strong> - 可复用的别人的代码模块</li>
+                <li><strong>⚙️ 函数</strong> - 封装逻辑的基本单元</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>🔑 编程的核心思想</h3>
+            <ul>
+                <li>✂️ 把大问题切成小问题</li>
+                <li>🏢 用模块搭建代码结构</li>
+                <li>📦 用函数包装具体功能</li>
+                <li>🔗 用包复用别人的成果</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <h2>❤️ 谢谢大家！</h2>
+        <h3>🎓 模块化编程基础概念</h3>
+        <p>理解这些概念是编程的基础</p>
+        <p><small>❓ 有问题随时问哦～</small></p>
+    </section>
+    			</div>
+		</div>
+
+		<!-- 🔥 爆炸特效依赖库 - GSAP动画引擎 -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+		
+		<!-- 🔥 爆炸特效JavaScript库 - 零代码魔法属性系统 -->
+		<script src="../effect/explose/explosion-effects.js"></script>
+
+		<script src="../dist/reveal.js"></script>
+		<script src="../plugin/notes/notes.js"></script>
+		<script src="../plugin/markdown/markdown.js"></script>
+		<script src="../plugin/highlight/highlight.js"></script>
+		<script>
+		
+			// 摄像头相关的魔法函数们
+			let cameraStream = null; // 存储摄像头流，就像是我们的视频管道
+			let isEnlarged = false; // 记录是否已经放大
+			let isMirrored = true; // 记录是否镜像，默认开启
+			
+			// 启动摄像头的函数 - 就像打开一扇窗户
+			async function startCamera() {
+				try {
+					// 请求访问摄像头 - 礼貌地敲门
+					const stream = await navigator.mediaDevices.getUserMedia({
+						video: {
+							width: { ideal: 1280 },
+							height: { ideal: 720 }
+						},
+						audio: false // 我们只要视频，不要声音
+					});
+					
+					cameraStream = stream;
+					const video = document.getElementById('cameraVideo');
+					video.srcObject = stream;
+					
+					// 显示摄像头窗口，隐藏启动按钮
+					document.getElementById('cameraContainer').classList.remove('hidden');
+					document.getElementById('startCameraBtn').classList.add('hidden');
+					
+					console.log('摄像头启动成功！默认镜像模式，就像魔法一样～');
+				} catch (error) {
+					console.error('哎呀，摄像头启动失败了：', error);
+					alert('抱歉，无法访问摄像头。可能需要您允许网站使用摄像头权限哦！');
+				}
+			}
+			
+			// 关闭摄像头的函数 - 就像关闭窗户
+			function stopCamera() {
+				if (cameraStream) {
+					// 停止所有的视频轨道
+					cameraStream.getTracks().forEach(track => track.stop());
+					cameraStream = null;
+				}
+				
+				// 隐藏摄像头窗口，显示启动按钮
+				document.getElementById('cameraContainer').classList.add('hidden');
+				document.getElementById('startCameraBtn').classList.remove('hidden');
+				
+				// 重置所有状态
+				isEnlarged = false;
+				isMirrored = true; // 重置为默认镜像状态
+				document.getElementById('cameraContainer').classList.remove('enlarged');
+				document.getElementById('cameraVideo').classList.remove('no-mirror');
+				document.getElementById('mirrorBtn').classList.add('active');
+				document.getElementById('mirrorBtn').title = '取消镜像';
+				
+				console.log('摄像头已关闭，期待下次再见！');
+			}
+			
+			// 切换放大/缩小的函数 - 就像是变焦镜头
+			function toggleEnlarge() {
+				const container = document.getElementById('cameraContainer');
+				isEnlarged = !isEnlarged;
+				
+				if (isEnlarged) {
+					container.classList.add('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '缩小';
+				} else {
+					container.classList.remove('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '放大';
+				}
+			}
+			
+			// 切换镜像效果的函数 - 就像是翻转镜子
+			function toggleMirror() {
+				const video = document.getElementById('cameraVideo');
+				const mirrorBtn = document.getElementById('mirrorBtn');
+				isMirrored = !isMirrored;
+				
+				if (isMirrored) {
+					video.classList.remove('no-mirror');
+					mirrorBtn.classList.add('active');
+					mirrorBtn.title = '取消镜像';
+					console.log('镜像模式开启！现在就像照镜子一样自然～');
+				} else {
+					video.classList.add('no-mirror');
+					mirrorBtn.classList.remove('active');
+					mirrorBtn.title = '开启镜像';
+					console.log('镜像模式关闭！');
+				}
+			}
+			
+			// 绑定事件监听器 - 就像是给按钮装上开关
+			document.addEventListener('DOMContentLoaded', function() {
+				// 启动摄像头按钮
+				document.getElementById('startCameraBtn').addEventListener('click', startCamera);
+				
+				// 关闭按钮
+				document.getElementById('closeBtn').addEventListener('click', stopCamera);
+				
+				// 放大/缩小按钮
+				document.getElementById('enlargeBtn').addEventListener('click', toggleEnlarge);
+				
+				// 镜像按钮
+				document.getElementById('mirrorBtn').addEventListener('click', toggleMirror);
+			});
+			
+			// 页面关闭时清理摄像头资源 - 就像是整理房间
+			window.addEventListener('beforeunload', function() {
+				if (cameraStream) {
+					cameraStream.getTracks().forEach(track => track.stop());
+				}
+			});
+			
+			// 初始化reveal.js
+			Reveal.initialize({
+				hash: true,
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+			
+			
+		</script>
+	</body>
+</html> 

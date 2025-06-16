@@ -1,0 +1,58 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+当我要你制作 ppt 的时候，
+
+你需要把里面的文本内容总结为一条一条的
+
+然后生成为 一个 js 导出对象，类似下面这样
+
+module.exports = {
+    title: '第二课：前端开发基础',
+    description: '前端开发入门课程',
+    theme: 'sky',
+    content: `
+    <section>
+        <h2>前端开发入门1</h2>
+        <h3>HTML、CSS 和 JavaScript</h3>
+        <p>
+            <small>讲师：nathan</small>
+        </p>
+    </section>
+
+    <section>
+        <section>
+            <h2>前端三剑客</h2>
+            <p>让我们来认识网页开发的三个核心技术</p>
+            <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JAVASCRIPT</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>HTML - 网页的骨架</h3>
+            <p>定义网页的结构和内容</p>
+        </section>
+
+        <section>
+            <h3>CSS - 网页的外观</h3>
+            <p>设计网页的样式和布局</p>
+        </section>
+
+        <section>
+            <h3>JavaScript - 网页的行为</h3>
+            <p>实现网页的交互和动态效果</p>
+        </section>
+    </section>
+    `
+}; 
+
+如果一个观点内容多，就多用几个 section
+
+如果可以使用列表 ul li，就使用，不然就用段落
+
+适当的使用字体图标

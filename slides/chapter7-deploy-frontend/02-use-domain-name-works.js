@@ -1,0 +1,551 @@
+module.exports = {
+    title: '域名解析 - 互联网的导航系统',
+    description: '从域名到IP地址的神奇旅程',
+    theme: 'sky',
+    content: `
+    <section>
+        <h2>域名解析</h2>
+        <h3>互联网的"GPS导航系统"</h3>
+        <p>
+            <small>讲师：nathan</small>
+        </p>
+        <p><i class="fas fa-route"></i> 让www.example.com找到正确的服务器！</p>
+    </section>
+
+    <section>
+        <section>
+            <h2>什么是域名解析？</h2>
+            <p>把"门牌号"翻译成"具体地址" 🏠</p>
+        </section>
+        
+        <section>
+            <h3>现实世界的类比</h3>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div class="bg-blue-50 p-4 rounded">
+                    <h4 class="font-bold text-blue-800 mb-2">寄快递</h4>
+                    <p class="text-blue-700 mb-2">你想给朋友寄快递：</p>
+                    <ul class="text-blue-700">
+                        <li>• 你知道：张三的家</li>
+                        <li>• 快递员需要：具体地址</li>
+                        <li>• 查询电话簿：找到详细地址</li>
+                        <li>• 成功送达：包裹到手</li>
+                    </ul>
+                </div>
+                <div class="bg-green-50 p-4 rounded">
+                    <h4 class="font-bold text-green-800 mb-2">访问网站</h4>
+                    <p class="text-green-700 mb-2">你想访问网站：</p>
+                    <ul class="text-green-700">
+                        <li>• 你输入：www.google.com</li>
+                        <li>• 浏览器需要：IP地址</li>
+                        <li>• 查询DNS：找到服务器地址</li>
+                        <li>• 成功访问：网页显示</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>为什么需要域名解析？</h3>
+            <ul>
+                <li class="fragment"><strong>人类友好</strong> - 我们记得住"google.com"</li>
+                <li class="fragment"><strong>机器需要数字</strong> - 服务器只认IP地址</li>
+                <li class="fragment"><strong>灵活管理</strong> - 可以随时更换服务器</li>
+                <li class="fragment"><strong>负载均衡</strong> - 一个域名对应多个服务器</li>
+            </ul>
+            <div class="fragment bg-yellow-50 p-4 rounded mt-4">
+                <p class="text-yellow-800"><strong>举例：</strong></p>
+                <p class="text-yellow-700 text-sm">google.com → 142.250.191.78<br>就像"北京天安门" → "北京市东城区东长安街"</p>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>DNS解析过程</h2>
+            <p>一场"问路"的接力赛 🏃‍♂️</p>
+        </section>
+        
+        <section>
+            <h3>解析步骤详解</h3>
+            <div class="text-left text-sm">
+                <div class="fragment">
+                    <h4 class="font-bold text-blue-600">1. 你输入网址</h4>
+                    <p>在浏览器地址栏输入: www.example.com</p>
+                </div>
+                <div class="fragment mt-3">
+                    <h4 class="font-bold text-green-600">2. 检查本地缓存</h4>
+                    <p>电脑先看看自己是否记得这个地址</p>
+                </div>
+                <div class="fragment mt-3">
+                    <h4 class="font-bold text-purple-600">3. 询问DNS服务器</h4>
+                    <p>如果不记得，就问"电话簿"（DNS服务器）</p>
+                </div>
+                <div class="fragment mt-3">
+                    <h4 class="font-bold text-red-600">4. 层层查询</h4>
+                    <p>从根域名服务器开始，一级一级往下找</p>
+                </div>
+                <div class="fragment mt-3">
+                    <h4 class="font-bold text-orange-600">5. 返回IP地址</h4>
+                    <p>最终找到: 192.168.1.100</p>
+                </div>
+                <div class="fragment mt-3">
+                    <h4 class="font-bold text-cyan-600">6. 连接服务器</h4>
+                    <p>浏览器用IP地址连接服务器，获取网页</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>DNS查询的"接力赛"</h3>
+            <div class="bg-gray-50 p-4 rounded">
+                <div class="text-xs space-y-2">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-blue-500 rounded mr-2"></div>
+                        <span><strong>你的电脑:</strong> "www.example.com在哪里？"</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-green-500 rounded mr-2"></div>
+                        <span><strong>本地DNS:</strong> "我不知道，去问根服务器"</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-purple-500 rounded mr-2"></div>
+                        <span><strong>根服务器:</strong> "找.com服务器去"</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-red-500 rounded mr-2"></div>
+                        <span><strong>.com服务器:</strong> "去example.com的DNS服务器"</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-orange-500 rounded mr-2"></div>
+                        <span><strong>example.com DNS:</strong> "在192.168.1.100"</span>
+                    </div>
+                </div>
+            </div>
+            <p class="fragment mt-4"><small>就像问路：先问派出所，派出所说去问街道办，最后找到了！</small></p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>DNS记录类型</h2>
+            <p>不同的"路标"指向不同的目的地 🚏</p>
+        </section>
+        
+        <section>
+            <h3>A记录 - 基础路标</h3>
+            <div class="bg-blue-50 p-4 rounded">
+                <h4 class="font-bold text-blue-800 mb-2">A记录 (Address)</h4>
+                <p class="text-blue-700 mb-2">将域名指向IPv4地址</p>
+                <div class="text-left text-sm">
+                    <p><strong>例子：</strong></p>
+                    <p>www.example.com → 192.168.1.100</p>
+                    <p><strong>用途：</strong>最常用，指向网站服务器</p>
+                </div>
+            </div>
+            <p class="fragment mt-4"><small>就像"张三家 → 北京市朝阳区XX街XX号"</small></p>
+        </section>
+
+        <section>
+            <h3>CNAME记录 - 别名路标</h3>
+            <div class="bg-green-50 p-4 rounded">
+                <h4 class="font-bold text-green-800 mb-2">CNAME记录 (Canonical Name)</h4>
+                <p class="text-green-700 mb-2">将一个域名指向另一个域名</p>
+                <div class="text-left text-sm">
+                    <p><strong>例子：</strong></p>
+                    <p>blog.example.com → www.example.com</p>
+                    <p>然后www.example.com → 192.168.1.100</p>
+                    <p><strong>用途：</strong>创建域名别名，便于管理</p>
+                </div>
+            </div>
+            <p class="fragment mt-4"><small>就像"张三家 → 老张家 → 具体地址"</small></p>
+        </section>
+
+        <section>
+            <h3>MX记录 - 邮局路标</h3>
+            <div class="bg-purple-50 p-4 rounded">
+                <h4 class="font-bold text-purple-800 mb-2">MX记录 (Mail Exchange)</h4>
+                <p class="text-purple-700 mb-2">指定邮件服务器地址</p>
+                <div class="text-left text-sm">
+                    <p><strong>例子：</strong></p>
+                    <p>example.com → mail.example.com</p>
+                    <p><strong>用途：</strong>处理@example.com的邮件</p>
+                </div>
+            </div>
+            <p class="fragment mt-4"><small>就像"给张三寄信 → 去XX邮局"</small></p>
+        </section>
+
+        <section>
+            <h3>其他记录类型</h3>
+            <div class="grid grid-cols-2 gap-4 text-xs">
+                <div class="bg-yellow-50 p-3 rounded">
+                    <h4 class="font-bold text-yellow-800">TXT记录</h4>
+                    <p class="text-yellow-700">存储文本信息，常用于验证域名所有权</p>
+                    <p><strong>例子：</strong>验证Google Analytics</p>
+                </div>
+                <div class="bg-red-50 p-3 rounded">
+                    <h4 class="font-bold text-red-800">AAAA记录</h4>
+                    <p class="text-red-700">IPv6地址（比IPv4更长）</p>
+                    <p><strong>例子：</strong>2001:db8::1</p>
+                </div>
+                <div class="bg-indigo-50 p-3 rounded">
+                    <h4 class="font-bold text-indigo-800">NS记录</h4>
+                    <p class="text-indigo-700">指定域名的DNS服务器</p>
+                    <p><strong>例子：</strong>ns1.cloudflare.com</p>
+                </div>
+                <div class="bg-pink-50 p-3 rounded">
+                    <h4 class="font-bold text-pink-800">SRV记录</h4>
+                    <p class="text-pink-700">指定特定服务的位置</p>
+                    <p><strong>例子：</strong>游戏服务器地址</p>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>在Cloudflare配置DNS</h2>
+            <p>给你的域名安装"导航系统" 🧭</p>
+        </section>
+        
+        <section>
+            <h3>第一步：添加域名到Cloudflare</h3>
+            <ol class="text-left text-sm">
+                <li class="fragment"><strong>登录Cloudflare</strong> - dash.cloudflare.com</li>
+                <li class="fragment"><strong>点击"Add Site"</strong> - 添加站点</li>
+                <li class="fragment"><strong>输入域名</strong> - 例如：example.com</li>
+                <li class="fragment"><strong>选择计划</strong> - 免费计划就够用</li>
+                <li class="fragment"><strong>扫描DNS记录</strong> - 自动导入现有记录</li>
+            </ol>
+            <div class="fragment mt-4 bg-blue-50 p-3 rounded">
+                <p class="text-blue-800 text-sm"><strong>💡 提示：</strong>Cloudflare会自动检测你的现有DNS设置</p>
+            </div>
+        </section>
+
+        <section>
+            <h3>第二步：更换域名服务器</h3>
+            <div class="text-left">
+                <p class="mb-3"><strong>在你的域名注册商处修改NS记录：</strong></p>
+                <div class="bg-gray-50 p-4 rounded text-sm">
+                    <p class="font-bold mb-2">原来的域名服务器：</p>
+                    <p class="text-gray-600">ns1.your-registrar.com<br>ns2.your-registrar.com</p>
+                    
+                    <p class="font-bold mt-4 mb-2">改为Cloudflare的：</p>
+                    <p class="text-green-600">alice.ns.cloudflare.com<br>bob.ns.cloudflare.com</p>
+                </div>
+                <div class="fragment mt-3 bg-yellow-50 p-3 rounded">
+                    <p class="text-yellow-800 text-sm"><strong>⏰ 注意：</strong>DNS更改需要24-48小时全球生效</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>第三步：配置DNS记录</h3>
+            <div class="text-left text-sm">
+                <p class="mb-3"><strong>进入DNS管理页面：</strong></p>
+                <ol class="space-y-2">
+                    <li>1. 在Cloudflare面板中点击你的域名</li>
+                    <li>2. 点击左侧菜单的"DNS"</li>
+                    <li>3. 你会看到DNS记录列表</li>
+                    <li>4. 点击"Add record"添加新记录</li>
+                </ol>
+                <div class="fragment mt-4">
+                    <img src="/api/placeholder/600/300" alt="Cloudflare DNS界面" class="rounded shadow">
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>第四步：添加A记录</h3>
+            <div class="bg-blue-50 p-4 rounded">
+                <h4 class="font-bold text-blue-800 mb-3">配置网站主域名：</h4>
+                <div class="grid grid-cols-3 gap-2 text-sm">
+                    <div>
+                        <p class="font-bold">Type (类型)</p>
+                        <p class="bg-white p-2 rounded">A</p>
+                    </div>
+                    <div>
+                        <p class="font-bold">Name (名称)</p>
+                        <p class="bg-white p-2 rounded">@</p>
+                        <p class="text-xs text-gray-600">@ 代表根域名</p>
+                    </div>
+                    <div>
+                        <p class="font-bold">Content (内容)</p>
+                        <p class="bg-white p-2 rounded">192.168.1.100</p>
+                        <p class="text-xs text-gray-600">你的服务器IP</p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <p class="font-bold">Proxy status (代理状态)</p>
+                    <p class="text-sm">🟡 Proxied - 开启Cloudflare加速和防护</p>
+                    <p class="text-sm">⚪ DNS only - 仅DNS解析，不使用代理</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>第五步：添加WWW记录</h3>
+            <div class="bg-green-50 p-4 rounded">
+                <h4 class="font-bold text-green-800 mb-3">配置www子域名：</h4>
+                <div class="grid grid-cols-3 gap-2 text-sm">
+                    <div>
+                        <p class="font-bold">Type (类型)</p>
+                        <p class="bg-white p-2 rounded">CNAME</p>
+                    </div>
+                    <div>
+                        <p class="font-bold">Name (名称)</p>
+                        <p class="bg-white p-2 rounded">www</p>
+                    </div>
+                    <div>
+                        <p class="font-bold">Content (内容)</p>
+                        <p class="bg-white p-2 rounded">example.com</p>
+                        <p class="text-xs text-gray-600">指向主域名</p>
+                    </div>
+                </div>
+                <p class="mt-3 text-sm"><strong>结果：</strong>www.example.com 和 example.com 都指向同一个网站</p>
+            </div>
+        </section>
+
+        <section>
+            <h3>常见DNS配置示例</h3>
+            <div class="text-xs">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border p-2">类型</th>
+                            <th class="border p-2">名称</th>
+                            <th class="border p-2">内容</th>
+                            <th class="border p-2">用途</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border p-2">A</td>
+                            <td class="border p-2">@</td>
+                            <td class="border p-2">192.168.1.100</td>
+                            <td class="border p-2">主网站</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">CNAME</td>
+                            <td class="border p-2">www</td>
+                            <td class="border p-2">example.com</td>
+                            <td class="border p-2">www版本</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">CNAME</td>
+                            <td class="border p-2">blog</td>
+                            <td class="border p-2">example.com</td>
+                            <td class="border p-2">博客子域名</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">MX</td>
+                            <td class="border p-2">@</td>
+                            <td class="border p-2">mail.example.com</td>
+                            <td class="border p-2">邮件服务</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">TXT</td>
+                            <td class="border p-2">@</td>
+                            <td class="border p-2">v=spf1 include:_spf...</td>
+                            <td class="border p-2">邮件验证</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>Cloudflare的特殊功能</h2>
+            <p>不仅仅是DNS，还是"超级保镖" 🛡️</p>
+        </section>
+        
+        <section>
+            <h3>橙色云朵 vs 灰色云朵</h3>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div class="bg-orange-50 p-4 rounded">
+                    <h4 class="font-bold text-orange-800 mb-2">🟡 Proxied (代理模式)</h4>
+                    <ul class="text-orange-700">
+                        <li>• 流量经过Cloudflare</li>
+                        <li>• 隐藏真实服务器IP</li>
+                        <li>• 自动SSL证书</li>
+                        <li>• DDoS防护</li>
+                        <li>• 缓存加速</li>
+                        <li>• 压缩优化</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 p-4 rounded">
+                    <h4 class="font-bold text-gray-800 mb-2">⚪ DNS Only (仅DNS)</h4>
+                    <ul class="text-gray-700">
+                        <li>• 直接连接服务器</li>
+                        <li>• 暴露真实IP地址</li>
+                        <li>• 无SSL保护</li>
+                        <li>• 无DDoS防护</li>
+                        <li>• 无缓存加速</li>
+                        <li>• 纯DNS解析</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="fragment mt-4"><strong>建议：</strong>网站域名使用代理模式，邮件等服务使用DNS Only</p>
+        </section>
+
+        <section>
+            <h3>免费SSL证书</h3>
+            <div class="bg-green-50 p-4 rounded">
+                <h4 class="font-bold text-green-800 mb-2">自动HTTPS加密</h4>
+                <ul class="text-green-700 text-sm">
+                    <li>• 开启代理模式自动获得SSL证书</li>
+                    <li>• 支持通配符证书 (*.example.com)</li>
+                    <li>• 自动续期，无需手动管理</li>
+                    <li>• 强制HTTPS重定向</li>
+                </ul>
+                <div class="mt-3 bg-white p-2 rounded">
+                    <p class="text-green-800"><strong>配置位置：</strong>SSL/TLS → Overview → Full (strict)</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>页面规则和重定向</h3>
+            <div class="text-left text-sm">
+                <h4 class="font-bold mb-2">常用配置：</h4>
+                <div class="space-y-3">
+                    <div class="bg-blue-50 p-3 rounded">
+                        <p class="font-bold text-blue-800">WWW重定向</p>
+                        <p class="text-blue-700">www.example.com → example.com</p>
+                    </div>
+                    <div class="bg-purple-50 p-3 rounded">
+                        <p class="font-bold text-purple-800">HTTPS强制</p>
+                        <p class="text-purple-700">http://example.com → https://example.com</p>
+                    </div>
+                    <div class="bg-yellow-50 p-3 rounded">
+                        <p class="font-bold text-yellow-800">缓存规则</p>
+                        <p class="text-yellow-700">静态文件缓存1个月</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>常见问题和解决方案</h2>
+            <p>DNS疑难杂症诊断 🔍</p>
+        </section>
+        
+        <section>
+            <h3>"网站访问不了"</h3>
+            <div class="text-left text-sm">
+                <h4 class="font-bold mb-2">检查清单：</h4>
+                <ol class="space-y-2">
+                    <li class="fragment">✅ <strong>DNS记录正确吗？</strong><br>检查A记录和CNAME是否指向正确</li>
+                    <li class="fragment">✅ <strong>域名服务器更换了吗？</strong><br>确认NS记录指向Cloudflare</li>
+                    <li class="fragment">✅ <strong>等待时间够吗？</strong><br>DNS更改需要24-48小时生效</li>
+                    <li class="fragment">✅ <strong>服务器运行正常吗？</strong><br>检查服务器状态和防火墙</li>
+                </ol>
+                <div class="fragment mt-3 bg-blue-50 p-3 rounded">
+                    <p class="text-blue-800"><strong>测试工具：</strong>dig example.com 或在线DNS检测工具</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>"SSL证书错误"</h3>
+            <div class="bg-red-50 p-4 rounded">
+                <h4 class="font-bold text-red-800 mb-2">可能原因和解决方案：</h4>
+                <ul class="text-red-700 text-sm space-y-2">
+                    <li><strong>证书还在生成中</strong><br>→ 等待15-30分钟</li>
+                    <li><strong>SSL模式设置错误</strong><br>→ 设置为"Full (strict)"</li>
+                    <li><strong>混合内容错误</strong><br>→ 确保页面内所有资源都是HTTPS</li>
+                    <li><strong>代理模式未开启</strong><br>→ 点击云朵图标开启代理</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h3>"邮件收不到"</h3>
+            <div class="bg-yellow-50 p-4 rounded">
+                <h4 class="font-bold text-yellow-800 mb-2">邮件DNS配置：</h4>
+                <ul class="text-yellow-700 text-sm space-y-2">
+                    <li><strong>MX记录设置错误</strong><br>→ 检查MX记录指向和优先级</li>
+                    <li><strong>邮件服务器代理了</strong><br>→ MX记录必须是"DNS Only"模式</li>
+                    <li><strong>SPF记录缺失</strong><br>→ 添加TXT记录防止被当作垃圾邮件</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>DNS性能优化</h2>
+            <p>让解析速度飞起来！ ⚡</p>
+        </section>
+        
+        <section>
+            <h3>TTL设置优化</h3>
+            <div class="bg-blue-50 p-4 rounded">
+                <h4 class="font-bold text-blue-800 mb-2">TTL (Time To Live) - 缓存时间</h4>
+                <div class="text-left text-sm">
+                    <p class="mb-2"><strong>不同场景的TTL设置：</strong></p>
+                    <ul class="text-blue-700 space-y-1">
+                        <li>• <strong>稳定网站：</strong> 1小时-1天</li>
+                        <li>• <strong>测试期间：</strong> 5分钟</li>
+                        <li>• <strong>迁移期间：</strong> 5分钟</li>
+                        <li>• <strong>CDN服务：</strong> 1天-1周</li>
+                    </ul>
+                    <p class="mt-2 text-blue-800"><strong>原则：</strong>稳定时设长，变更时设短</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>地理位置优化</h3>
+            <div class="text-sm">
+                <p class="mb-3"><strong>Cloudflare的地理DNS功能：</strong></p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-green-50 p-3 rounded">
+                        <h4 class="font-bold text-green-800">中国用户</h4>
+                        <p class="text-green-700">example.com → 中国服务器IP</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded">
+                        <h4 class="font-bold text-blue-800">美国用户</h4>
+                        <p class="text-blue-700">example.com → 美国服务器IP</p>
+                    </div>
+                </div>
+                <p class="mt-3 text-gray-600"><small>需要Cloudflare Business计划或以上</small></p>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <h2>🎉 DNS配置完成！</h2>
+        <div class="text-left">
+            <h3 class="mb-4">✅ 你已经掌握了：</h3>
+            <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check text-green-500"></i> DNS解析工作原理</li>
+                <li><i class="fas fa-check text-green-500"></i> 各种DNS记录类型的用途</li>
+                <li><i class="fas fa-check text-green-500"></i> Cloudflare DNS配置方法</li>
+                <li><i class="fas fa-check text-green-500"></i> 代理模式 vs DNS Only模式</li>
+                <li><i class="fas fa-check text-green-500"></i> SSL证书自动配置</li>
+                <li><i class="fas fa-check text-green-500"></i> 常见问题的排查解决</li>
+            </ul>
+        </div>
+        
+        <div class="mt-6 bg-blue-50 p-4 rounded">
+            <p class="text-blue-800"><strong>🌐 现在你的域名：</strong></p>
+            <ul class="text-blue-700 text-sm">
+                <li>• 解析速度全球最快</li>
+                <li>• 自动HTTPS加密保护</li>
+                <li>• DDoS攻击自动防护</li>
+                <li>• 访问速度显著提升</li>
+            </ul>
+        </div>
+        
+        <p class="mt-4 text-lg">
+            <strong>你的网站现在拥有了专业级的域名解析服务！</strong> 🚀
+        </p>
+    </section>
+    `
+};
+
+

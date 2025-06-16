@@ -1,0 +1,541 @@
+module.exports = {
+    title: 'Cursor Prompt技巧',
+    description: '掌握与AI对话的艺术 - Prompt工程',
+    theme: 'sky',
+    content: `
+    <section>
+        <h2>Cursor Prompt技巧</h2>
+        <h3>掌握与AI对话的艺术</h3>
+        <ul>
+            <li>🎯 什么是Prompt</li>
+            <li>📝 编写高效Prompt</li>
+            <li>💡 实战技巧分享</li>
+            <li>⚠️ 常见错误避坑</li>
+        </ul>
+        <p>
+            <small>讲师：Nathan</small>
+        </p>
+    </section>
+
+    <section>
+        <section>
+            <h2>什么是Prompt？</h2>
+            <p>Prompt就是你和AI的对话内容</p>
+            <ul>
+                <li>💬 <strong>简单理解</strong>：就是你对AI说的话</li>
+                <li>🎯 <strong>核心作用</strong>：告诉AI你想要什么</li>
+                <li>🧠 <strong>AI理解</strong>：通过你的话理解你的需求</li>
+                <li>✨ <strong>神奇之处</strong>：好的Prompt能让AI做出惊人的事</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>Prompt的重要性</h3>
+            <p>同样的AI，不同的问法，结果天差地别</p>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="width: 45%;">
+                    <h4>😅 糟糕的Prompt</h4>
+                    <ul>
+                        <li>"帮我写代码"</li>
+                        <li>"这个不对"</li>
+                        <li>"修复一下"</li>
+                        <li>"做个网站"</li>
+                    </ul>
+                </div>
+                <div style="width: 45%;">
+                    <h4>🚀 优秀的Prompt</h4>
+                    <ul>
+                        <li>"创建一个用户登录页面，包含邮箱和密码输入框"</li>
+                        <li>"这个函数在处理空值时会报错"</li>
+                        <li>"请修复这个CSS布局问题"</li>
+                        <li>"制作一个响应式的产品展示网站"</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>Prompt编写的黄金原则</h2>
+            <p>让AI更好理解你的5个原则</p>
+            <ul>
+                <li>🎯 <strong>具体明确</strong> - 说清楚要什么</li>
+                <li>📋 <strong>提供上下文</strong> - 给足背景信息</li>
+                <li>📝 <strong>分步骤描述</strong> - 一步一步来</li>
+                <li>🎨 <strong>举例说明</strong> - 给个参考样本</li>
+                <li>🔄 <strong>迭代优化</strong> - 不断完善</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>原则1：具体明确</h3>
+            <div style="text-align: left;">
+                <h4>❌ 模糊的描述：</h4>
+                <p>"做一个表单"</p>
+                
+                <h4>✅ 具体的描述：</h4>
+                <p>"创建一个用户注册表单，包含：</p>
+                <ul>
+                    <li>用户名输入框（必填）</li>
+                    <li>邮箱输入框（必填，需验证格式）</li>
+                    <li>密码输入框（最少8位）</li>
+                    <li>确认密码输入框</li>
+                    <li>提交按钮和重置按钮"</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>原则2：提供上下文</h3>
+            <div style="text-align: left;">
+                <h4>🔍 选中相关代码</h4>
+                <p>让AI看到你正在处理的代码</p>
+                
+                <h4>📖 说明项目背景</h4>
+                <p>"这是一个电商网站的购物车功能"</p>
+                
+                <h4>🎯 明确技术栈</h4>
+                <p>"使用React + TypeScript开发"</p>
+                
+                <h4>⚠️ 指出约束条件</h4>
+                <p>"需要兼容IE11浏览器"</p>
+            </div>
+        </section>
+    </section>
+
+    
+
+    <section>
+        <section>
+            <h2>Cursor专用技巧</h2>
+            <p>充分利用Cursor的特殊功能</p>
+            <ul>
+                <li>⌨️ <strong>Ctrl+K</strong> - 行内编辑</li>
+                <li>💬 <strong>Ctrl+L</strong> - 侧边栏对话</li>
+                <li>🎯 <strong>选中代码</strong> - 针对性修改</li>
+                <li>📁 <strong>@文件名</strong> - 引用其他文件</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>行内编辑技巧(Ctrl+K)</h3>
+            <div style="text-align: left;">
+                <h4>✨ 适用场景：</h4>
+                <ul>
+                    <li>修改单行代码</li>
+                    <li>添加注释</li>
+                    <li>快速重构变量名</li>
+                </ul>
+                
+                <h4>💡 使用技巧：</h4>
+                <ul>
+                    <li>先选中要修改的代码</li>
+                    <li>按Ctrl+K打开编辑框</li>
+                    <li>描述你要做的修改</li>
+                    <li>Tab键接受建议</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>对话技巧(Ctrl+L)</h3>
+            <div style="text-align: left;">
+                <h4>🎯 适用场景：</h4>
+                <ul>
+                    <li>复杂功能开发</li>
+                    <li>代码解释说明</li>
+                    <li>多轮对话优化</li>
+                </ul>
+                
+                <h4>📝 对话要点：</h4>
+                <ul>
+                    <li>每次只问一个问题</li>
+                    <li>如果不满意，说明具体哪里不对</li>
+                    <li>善用"请继续"来完成长代码</li>
+                    <li>记得说"谢谢"，AI也喜欢礼貌 😊</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>常见错误与避坑指南</h2>
+            <p>新手最容易犯的5个错误</p>
+            <ul>
+                <li>😅 描述太简单</li>
+                <li>🤔 期望过高</li>
+                <li>😰 不敢试错</li>
+                <li>🔄 重复同样问题</li>
+                <li>📚 不看AI回复的解释</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>错误1：描述太简单</h3>
+            <div style="text-align: left;">
+                <h4>❌ 问题示例：</h4>
+                <p>"帮我做个网站"</p>
+                
+                <h4>🤖 AI的困惑：</h4>
+                <ul>
+                    <li>什么类型的网站？</li>
+                    <li>需要什么功能？</li>
+                    <li>用什么技术？</li>
+                    <li>什么风格？</li>
+                </ul>
+                
+                <h4>✅ 改进方法：</h4>
+                <p>分步骤详细描述，从简单开始</p>
+            </div>
+        </section>
+        
+        <section>
+            <h3>错误2：期望过高</h3>
+            <div style="text-align: left;">
+                <h4>⚠️ 现实情况：</h4>
+                <ul>
+                    <li>AI不是万能的</li>
+                    <li>复杂功能需要分步实现</li>
+                    <li>有时候会出错</li>
+                    <li>需要你提供反馈</li>
+                </ul>
+                
+                <h4>💡 正确心态：</h4>
+                <ul>
+                    <li>把AI当作智能助手</li>
+                    <li>一起合作完成任务</li>
+                    <li>耐心指导和修正</li>
+                    <li>享受学习的过程</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+  
+
+    <section>
+        <section>
+            <h2>Cursor Rules - 超级武器</h2>
+            <p>让AI记住你的偏好和项目规范</p>
+            <ul>
+                <li>🧠 <strong>什么是Rules</strong> - AI的记忆系统</li>
+                <li>📁 <strong>项目规则</strong> - 团队协作利器</li>
+                <li>👤 <strong>个人规则</strong> - 全局偏好设置</li>
+                <li>🌐 <strong>网站开发专用</strong> - 实战案例</li>
+            </ul>
+            <p style="margin-top: 20px;">
+                <em>🎯 Rules让你的AI变成专属的开发伙伴！</em>
+            </p>
+        </section>
+        
+        <section>
+            <h3>为什么需要Rules？</h3>
+            <div style="text-align: left;">
+                <h4>😅 没有Rules的痛苦：</h4>
+                <ul>
+                    <li>每次都要重复相同的要求</li>
+                    <li>"请用React写""请用TypeScript"</li>
+                    <li>"样式用Tailwind CSS"</li>
+                    <li>"记住我们的组件命名规范"</li>
+                </ul>
+                
+                <h4>🚀 有了Rules的神奇：</h4>
+                <ul>
+                    <li>AI自动记住你的偏好</li>
+                    <li>自动应用项目规范</li>
+                    <li>团队保持代码风格一致</li>
+                    <li>新人快速上手项目</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>Rules的三种类型</h2>
+            <p>不同场景，不同用法</p>
+            <ul>
+                <li>📁 <strong>项目规则</strong> - 存在.cursor/rules文件夹</li>
+                <li>👤 <strong>用户规则</strong> - 全局生效的个人偏好</li>
+                <li>🧠 <strong>记忆规则</strong> - AI自动生成的对话记忆</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>📁 项目规则 - 团队协作</h3>
+            <div style="text-align: left;">
+                <h4>💡 特点：</h4>
+                <ul>
+                    <li>存储在 <code>.cursor/rules</code> 文件夹</li>
+                    <li>版本控制，团队共享</li>
+                    <li>可以按目录分级管理</li>
+                    <li>支持文件引用</li>
+                </ul>
+                
+                <h4>🎯 适用场景：</h4>
+                <ul>
+                    <li>前端组件开发规范</li>
+                    <li>API接口设计标准</li>
+                    <li>代码样式要求</li>
+                    <li>项目架构约定</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>👤 用户规则 - 个人偏好</h3>
+            <div style="text-align: left;">
+                <h4>💡 特点：</h4>
+                <ul>
+                    <li>在Cursor设置中配置</li>
+                    <li>所有项目都会应用</li>
+                    <li>纯文本格式</li>
+                    <li>简单直接</li>
+                </ul>
+                
+                <h4>📝 常见用法：</h4>
+                <blockquote style="font-size: 0.9em;">
+                    请用中文回复。代码注释也用中文。<br>
+                    优先使用现代JavaScript语法。<br>
+                    CSS样式优先考虑Flexbox布局。
+                </blockquote>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>网站开发Rules实战</h2>
+            <p>直接可用的Rules模板</p>
+            <ul>
+                <li>🎨 <strong>前端组件规范</strong></li>
+                <li>🔧 <strong>API开发标准</strong></li>
+                <li>📱 <strong>响应式设计要求</strong></li>
+                <li>⚡ <strong>性能优化指南</strong></li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>🎨 前端组件Rules</h3>
+            <div style="text-align: left; font-size: 0.8em;">
+                <h4>📁 文件：.cursor/rules/frontend-components.mdc</h4>
+                <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; text-align: left;">
+---
+description: 前端组件开发规范
+globs: "src/components/**/*"
+alwaysApply: false
+---
+
+开发React组件时请遵循以下规范：
+
+1. **组件结构**：
+   - 使用函数式组件 + Hooks
+   - Props接口定义在组件上方
+   - 导出为具名导出
+
+2. **样式规范**：
+   - 使用Tailwind CSS类名
+   - 响应式设计优先
+   - 深色模式支持
+
+3. **命名约定**：
+   - 组件名使用PascalCase
+   - 文件名使用kebab-case
+   - CSS类名使用BEM规范
+
+@component-template.tsx
+                </pre>
+            </div>
+        </section>
+        
+        <section>
+            <h3>🔧 API开发Rules</h3>
+            <div style="text-align: left; font-size: 0.8em;">
+                <h4>📁 文件：.cursor/rules/api-standards.mdc</h4>
+                <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; text-align: left;">
+---
+description: API接口开发标准
+globs: "src/api/**/*", "pages/api/**/*"
+alwaysApply: true
+---
+
+API开发请遵循以下标准：
+
+1. **请求验证**：
+   - 使用zod进行参数验证
+   - 定义清晰的错误信息
+   - 统一的响应格式
+
+2. **REST规范**：
+   - GET/POST/PUT/DELETE语义正确
+   - 状态码使用标准
+   - URL命名规范化
+
+3. **错误处理**：
+   - 统一的错误响应格式
+   - 日志记录完整
+   - 用户友好的错误信息
+
+@api-response-template.ts
+                </pre>
+            </div>
+        </section>
+        
+        <section>
+            <h3>📱 响应式设计Rules</h3>
+            <div style="text-align: left; font-size: 0.8em;">
+                <h4>📁 文件：.cursor/rules/responsive-design.mdc</h4>
+                <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; text-align: left;">
+---
+description: 响应式网站设计要求
+globs: "**/*.css", "**/*.scss", "**/*.tsx"
+alwaysApply: false
+---
+
+响应式设计要求：
+
+1. **断点设置**：
+   - 移动端：< 768px
+   - 平板：768px - 1024px  
+   - 桌面：> 1024px
+
+2. **设计原则**：
+   - 移动优先设计
+   - 触控友好的按钮尺寸
+   - 文字大小适中
+
+3. **测试要求**：
+   - 在不同设备上测试
+   - 检查横竖屏切换
+   - 确保可访问性
+
+4. **Tailwind类名**：
+   - sm: md: lg: xl: 2xl: 前缀
+   - 使用flex和grid布局
+                </pre>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>Rules创建和管理</h2>
+            <p>从创建到使用的完整流程</p>
+            <ul>
+                <li>⚙️ <strong>创建Rules</strong> - Cmd+Shift+P快捷创建</li>
+                <li>🎯 <strong>引用Rules</strong> - @规则名 手动引用</li>
+                <li>🔄 <strong>生成Rules</strong> - 从对话自动生成</li>
+                <li>📊 <strong>管理Rules</strong> - 设置面板查看和编辑</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>⚙️ 快速创建Rules</h3>
+            <div style="text-align: left;">
+                <h4>🚀 操作步骤：</h4>
+                <ol>
+                    <li>按 <strong>Cmd+Shift+P</strong> (Mac) 或 <strong>Ctrl+Shift+P</strong> (Windows)</li>
+                    <li>输入 "New Cursor Rule"</li>
+                    <li>选择规则类型和位置</li>
+                    <li>编写规则内容</li>
+                    <li>保存并测试</li>
+                </ol>
+                
+                <h4>💡 小贴士：</h4>
+                <ul>
+                    <li>先在聊天中调试好需求</li>
+                    <li>再用 "/Generate Cursor Rules" 自动生成</li>
+                    <li>可以随时在设置中修改</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>🎯 Rules实用技巧</h3>
+            <div style="text-align: left;">
+                <h4>📁 项目结构建议：</h4>
+                <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; font-size: 0.8em;">
+.cursor/rules/
+├── frontend/
+│   ├── components.mdc    # 组件开发规范
+│   ├── styling.mdc       # 样式指南
+│   └── routing.mdc       # 路由规范
+├── backend/
+│   ├── api.mdc          # API开发标准
+│   ├── database.mdc     # 数据库规范
+│   └── auth.mdc         # 认证授权
+└── common/
+    ├── typescript.mdc   # TS配置
+    └── testing.mdc      # 测试规范
+                </pre>
+                
+                <h4>🔧 最佳实践：</h4>
+                <ul>
+                    <li>Rules内容简洁明确</li>
+                    <li>配合实际代码模板</li>
+                    <li>定期更新和优化</li>
+                    <li>团队协作时保持同步</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>Rules + Prompt完美配合</h2>
+            <p>让AI成为你的专属开发伙伴</p>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="width: 45%;">
+                    <h4>🔧 Rules负责：</h4>
+                    <ul>
+                        <li>项目规范和标准</li>
+                        <li>代码风格约定</li>
+                        <li>技术栈偏好</li>
+                        <li>团队协作规范</li>
+                    </ul>
+                </div>
+                <div style="width: 45%;">
+                    <h4>💬 Prompt负责：</h4>
+                    <ul>
+                        <li>具体的开发需求</li>
+                        <li>实时的问题解决</li>
+                        <li>创意和想法表达</li>
+                        <li>迭代和优化指导</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="margin-top: 30px;">
+                <em>🎯 Rules设定框架，Prompt填充细节！</em>
+            </p>
+        </section>
+    </section>
+
+    <section>
+        <h2>课程总结</h2>
+        <div style="text-align: left;">
+            <h3>掌握Prompt的关键要点：</h3>
+            <ul>
+                <li>🎯 <strong>具体明确</strong> - 说清楚要什么</li>
+                <li>📋 <strong>提供上下文</strong> - 给足背景信息</li>
+                <li>📝 <strong>使用模板</strong> - 提高效率和准确性</li>
+                <li>🔄 <strong>迭代优化</strong> - 不断完善和学习</li>
+                <li>💬 <strong>善于沟通</strong> - 把AI当作智能伙伴</li>
+            </ul>
+            <p style="margin-top: 30px;">
+                <em>🚀 记住：好的Prompt是AI编程成功的一半！</em>
+            </p>
+        </div>
+    </section>
+    `
+};
+
+
+
+
+
+
+
+
+

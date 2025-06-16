@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>网络请求如何工作 - AI全栈开发课程</title>
+		<meta name="description" content="HTTP请求详解 - GET和POST请求">
+
+		<link rel="stylesheet" href="../dist/reset.css">
+		<link rel="stylesheet" href="../dist/reveal.css">
+		<link rel="stylesheet" href="../dist/theme/blood.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+		
+		<!-- Font Awesome 图标库 -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<!-- 🔥 爆炸特效样式库 - 自动引入，让每个页面都有魔法！ -->
+		<link rel="stylesheet" href="../effect/explose/explosion-effects.css">
+        <!-- 自定义星星特效样式 -->
+		<style>
+		
+			
+		
+			
+		
+			
+			/* 让reveal.js的内容层级更高 */
+			.reveal {
+				position: relative;
+				z-index: 10;
+			}
+			
+			/* 摄像头窗口样式 - 我们的魔法镜子 */
+			.camera-container {
+				position: fixed;
+				bottom: 10px;
+				left: 10px;
+				width: 200px;
+				height: 150px;
+				background: #000;
+				border: 2px solid #333;
+				border-radius: 10px;
+				overflow: hidden;
+				z-index: 1000;
+				transition: all 0.3s ease;
+				box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+			}
+			
+			/* 放大状态的摄像头窗口 */
+			.camera-container.enlarged {
+				width: 400px;
+				height: 300px;
+				bottom: 50px;
+				left: 50px;
+			}
+			
+			/* 摄像头视频元素 */
+			.camera-video {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 7px;
+				transition: all 0.3s ease;
+				/* 默认镜像效果 - 就像真正的镜子 */
+				transform: scaleX(-1);
+			}
+			
+			/* 取消镜像效果 */
+			.camera-video.no-mirror {
+				transform: scaleX(1);
+			}
+			
+			/* 控制按钮容器 - 只在hover时显示 */
+			.camera-controls {
+				position: absolute;
+				top: 5px;
+				right: 5px;
+				display: flex;
+				gap: 5px;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				pointer-events: none;
+			}
+			
+			/* 摄像头容器被hover时显示控制按钮 */
+			.camera-container:hover .camera-controls {
+				opacity: 1;
+				pointer-events: auto;
+			}
+			
+			/* 控制按钮样式 */
+			.control-btn {
+				width: 25px;
+				height: 25px;
+				background: rgba(0,0,0,0.7);
+				border: none;
+				border-radius: 50%;
+				color: white;
+				cursor: pointer;
+				font-size: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: all 0.2s;
+			}
+			
+			.control-btn:hover {
+				background: rgba(0,0,0,0.9);
+				transform: scale(1.1);
+			}
+			
+			/* 激活状态的按钮 */
+			.control-btn.active {
+				background: #4CAF50;
+			}
+			
+			/* 隐藏状态 */
+			.camera-container.hidden {
+				display: none;
+			}
+			
+			/* 启动摄像头的按钮 */
+			.start-camera-btn {
+				position: fixed;
+				bottom: 20px;
+				left: 20px;
+				padding: 10px 15px;
+				/* background: #4CAF50; */
+				/* color: white; */
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 1000;
+				font-size: 14px;
+				transition: background 0.3s;
+			}
+			
+			/* .start-camera-btn:hover {
+				background: #45a049;
+			} */
+			
+			.start-camera-btn.hidden {
+				display: none;
+			}
+			
+			/* 返回首页按钮 */
+			.back-home-btn {
+				position: fixed;
+				top: 20px;
+				left: 20px;
+				padding: 8px 12px;
+				background: rgba(0,0,0,0.7);
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 1001;
+				font-size: 14px;
+				text-decoration: none;
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				transition: all 0.3s ease;
+				backdrop-filter: blur(10px);
+			}
+			
+			.back-home-btn:hover {
+				background: rgba(0,0,0,0.9);
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- 返回首页按钮 -->
+		<a href="/ppt/index.html" class="back-home-btn">
+			🏠
+		</a>
+
+        	<!-- 启动摄像头按钮 -->
+		<button class="start-camera-btn" id="startCameraBtn">📷</button>
+		
+		<!-- 摄像头窗口 - 我们的魔法镜子 -->
+		<div class="camera-container hidden" id="cameraContainer">
+			<video class="camera-video" id="cameraVideo" autoplay muted></video>
+			<div class="camera-controls">
+				<button class="control-btn" id="enlargeBtn" title="放大/缩小">⛶</button>
+				<button class="control-btn active" id="mirrorBtn" title="取消镜像">🪞</button>
+				<button class="control-btn" id="closeBtn" title="关闭摄像头">✕</button>
+			</div>
+		</div>
+		
+		<div class="reveal">
+			<div class="slides"> 
+    <section>
+        <h2>网络请求如何工作</h2>
+        <h3>请求通常默认是 http 请求</h3>
+        <ul>
+            <li>GET请求</li>
+            <li>POST请求</li>
+            <li>Headers和参数</li>
+        </ul>
+        <p>
+            <small>讲师：Nathan</small>
+        </p>
+    </section>
+
+    <section>
+        <section>
+            <h2>什么是网络请求？</h2>
+            <p>打开网站，就是向服务器发送请求的过程</p>
+            <ul>
+                <li>🌐 每次访问网站都在发送请求</li>
+                <li>📡 请求就像是你和网站的对话</li>
+                <li>🔄 网站收到请求后返回内容</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>请求的两种主要类型</h3>
+            <div style="display: flex; justify-content: space-around;">
+                <div>
+                    <h4>📥 GET请求</h4>
+                    <p>获取信息</p>
+                </div>
+                <div>
+                    <h4>📤 POST请求</h4>
+                    <p>发送信息</p>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>GET请求 - 获取信息</h2>
+            <p>Get = 获取的意思</p>
+            <ul>
+                <li>🔍 在浏览器中输入网址</li>
+                <li>📖 获取网页内容</li>
+                <li>🔗 所有链接点击都是GET请求</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>GET请求的特点</h3>
+            <ul>
+                <li>✅ 简单直接</li>
+                <li>📏 可以带少量参数</li>
+                <li>👀 参数在网址中可见</li>
+                <li>🔒 适合获取数据</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>POST请求 - 发送信息</h2>
+            <p>当你需要上传东西时...</p>
+            <ul>
+                <li>📸 上传图片</li>
+                <li>🎥 上传视频</li>
+                <li>📄 上传文档</li>
+                <li>✍️ 提交表单</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>POST请求的Body</h3>
+            <p>POST请求有一个"大肚子"叫Body, 和 GET 请求的主要不同就在这里</p>
+            <ul>
+                <li>🎒 可以装很多东西</li>
+                <li>📝 长文字</li>
+                <li>🖼️ 图片文件</li>
+                <li>🎬 视频文件</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>HTTPS请求</h2>
+            <p>请求的全称是HTTP请求， 但是通常我们用 HTTPS 请求</p>
+            <ul>
+                <li>🌐 HTTP - 网络传输协议</li>
+                <li>🔒 HTTPS - 加密版本（更安全）</li>
+                <li>🔗 这就是为什么网址前面有http://</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>其他请求类型</h3>
+            <p>还有PUT、DELETE等请求</p>
+            <ul>
+                <li>📝 PUT - 更新数据</li>
+                <li>🗑️ DELETE - 删除数据</li>
+                <li>⚠️ 用得很少，可以被POST替代</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>请求Headers - 身份标识</h2>
+            <p>网站是怎么知道你是谁的？</p>
+            <ul>
+                <li>🆔 Headers包含你的身份信息</li>
+                <li>🌏 语言偏好（中文/英文）</li>
+                <li>🔑 登录状态</li>
+                <li>📍 位置信息</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>浏览器的自动工作</h3>
+            <p>这些信息是浏览器偷偷帮你加上的</p>
+            <ul>
+                <li>🤖 自动添加Headers</li>
+                <li>🌐 根据IP显示对应语言</li>
+                <li>💾 记住登录状态</li>
+                <li>👤 识别用户身份</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>请求参数</h2>
+            <p>向网站发送额外信息的方式</p>
+            <ul>
+                <li>🔗 GET请求：参数在网址后面</li>
+                <li>📦 POST请求：参数在Body里面</li>
+                <li>📏 GET参数有长度限制</li>
+                <li>💪 POST可以发送大量数据</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <h2>课程总结</h2>
+        <div style="text-align: left;">
+            <h3>今天我们学到了：</h3>
+            <ul>
+                <li>🔍 <strong>GET请求</strong> - 获取信息</li>
+                <li>📤 <strong>POST请求</strong> - 发送信息</li>
+                <li>🆔 <strong>Headers</strong> - 身份标识</li>
+                <li>📝 <strong>参数和Body</strong> - 数据传输</li>
+            </ul>
+            <p style="margin-top: 30px;">
+                <em>以后提到"请求"，你就知道是GET还是POST了！</em>
+            </p>
+        </div>
+    </section>
+    			</div>
+		</div>
+
+		<!-- 🔥 爆炸特效依赖库 - GSAP动画引擎 -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+		
+		<!-- 🔥 爆炸特效JavaScript库 - 零代码魔法属性系统 -->
+		<script src="../effect/explose/explosion-effects.js"></script>
+
+		<script src="../dist/reveal.js"></script>
+		<script src="../plugin/notes/notes.js"></script>
+		<script src="../plugin/markdown/markdown.js"></script>
+		<script src="../plugin/highlight/highlight.js"></script>
+		<script>
+		
+			// 摄像头相关的魔法函数们
+			let cameraStream = null; // 存储摄像头流，就像是我们的视频管道
+			let isEnlarged = false; // 记录是否已经放大
+			let isMirrored = true; // 记录是否镜像，默认开启
+			
+			// 启动摄像头的函数 - 就像打开一扇窗户
+			async function startCamera() {
+				try {
+					// 请求访问摄像头 - 礼貌地敲门
+					const stream = await navigator.mediaDevices.getUserMedia({
+						video: {
+							width: { ideal: 1280 },
+							height: { ideal: 720 }
+						},
+						audio: false // 我们只要视频，不要声音
+					});
+					
+					cameraStream = stream;
+					const video = document.getElementById('cameraVideo');
+					video.srcObject = stream;
+					
+					// 显示摄像头窗口，隐藏启动按钮
+					document.getElementById('cameraContainer').classList.remove('hidden');
+					document.getElementById('startCameraBtn').classList.add('hidden');
+					
+					console.log('摄像头启动成功！默认镜像模式，就像魔法一样～');
+				} catch (error) {
+					console.error('哎呀，摄像头启动失败了：', error);
+					alert('抱歉，无法访问摄像头。可能需要您允许网站使用摄像头权限哦！');
+				}
+			}
+			
+			// 关闭摄像头的函数 - 就像关闭窗户
+			function stopCamera() {
+				if (cameraStream) {
+					// 停止所有的视频轨道
+					cameraStream.getTracks().forEach(track => track.stop());
+					cameraStream = null;
+				}
+				
+				// 隐藏摄像头窗口，显示启动按钮
+				document.getElementById('cameraContainer').classList.add('hidden');
+				document.getElementById('startCameraBtn').classList.remove('hidden');
+				
+				// 重置所有状态
+				isEnlarged = false;
+				isMirrored = true; // 重置为默认镜像状态
+				document.getElementById('cameraContainer').classList.remove('enlarged');
+				document.getElementById('cameraVideo').classList.remove('no-mirror');
+				document.getElementById('mirrorBtn').classList.add('active');
+				document.getElementById('mirrorBtn').title = '取消镜像';
+				
+				console.log('摄像头已关闭，期待下次再见！');
+			}
+			
+			// 切换放大/缩小的函数 - 就像是变焦镜头
+			function toggleEnlarge() {
+				const container = document.getElementById('cameraContainer');
+				isEnlarged = !isEnlarged;
+				
+				if (isEnlarged) {
+					container.classList.add('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '缩小';
+				} else {
+					container.classList.remove('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '放大';
+				}
+			}
+			
+			// 切换镜像效果的函数 - 就像是翻转镜子
+			function toggleMirror() {
+				const video = document.getElementById('cameraVideo');
+				const mirrorBtn = document.getElementById('mirrorBtn');
+				isMirrored = !isMirrored;
+				
+				if (isMirrored) {
+					video.classList.remove('no-mirror');
+					mirrorBtn.classList.add('active');
+					mirrorBtn.title = '取消镜像';
+					console.log('镜像模式开启！现在就像照镜子一样自然～');
+				} else {
+					video.classList.add('no-mirror');
+					mirrorBtn.classList.remove('active');
+					mirrorBtn.title = '开启镜像';
+					console.log('镜像模式关闭！');
+				}
+			}
+			
+			// 绑定事件监听器 - 就像是给按钮装上开关
+			document.addEventListener('DOMContentLoaded', function() {
+				// 启动摄像头按钮
+				document.getElementById('startCameraBtn').addEventListener('click', startCamera);
+				
+				// 关闭按钮
+				document.getElementById('closeBtn').addEventListener('click', stopCamera);
+				
+				// 放大/缩小按钮
+				document.getElementById('enlargeBtn').addEventListener('click', toggleEnlarge);
+				
+				// 镜像按钮
+				document.getElementById('mirrorBtn').addEventListener('click', toggleMirror);
+			});
+			
+			// 页面关闭时清理摄像头资源 - 就像是整理房间
+			window.addEventListener('beforeunload', function() {
+				if (cameraStream) {
+					cameraStream.getTracks().forEach(track => track.stop());
+				}
+			});
+			
+			// 初始化reveal.js
+			Reveal.initialize({
+				hash: true,
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+			
+			
+		</script>
+	</body>
+</html> 

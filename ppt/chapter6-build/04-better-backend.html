@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>后端是怎么工作的 - AI全栈开发课程</title>
+		<meta name="description" content="深入理解后端路由和数据库的工作原理">
+
+		<link rel="stylesheet" href="../dist/reset.css">
+		<link rel="stylesheet" href="../dist/reveal.css">
+		<link rel="stylesheet" href="../dist/theme/white.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+		
+		<!-- Font Awesome 图标库 -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<!-- 🔥 爆炸特效样式库 - 自动引入，让每个页面都有魔法！ -->
+		<link rel="stylesheet" href="../effect/explose/explosion-effects.css">
+        <!-- 自定义星星特效样式 -->
+		<style>
+		
+			
+		
+			
+		
+			
+			/* 让reveal.js的内容层级更高 */
+			.reveal {
+				position: relative;
+				z-index: 10;
+			}
+			
+			/* 摄像头窗口样式 - 我们的魔法镜子 */
+			.camera-container {
+				position: fixed;
+				bottom: 10px;
+				left: 10px;
+				width: 200px;
+				height: 150px;
+				background: #000;
+				border: 2px solid #333;
+				border-radius: 10px;
+				overflow: hidden;
+				z-index: 1000;
+				transition: all 0.3s ease;
+				box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+			}
+			
+			/* 放大状态的摄像头窗口 */
+			.camera-container.enlarged {
+				width: 400px;
+				height: 300px;
+				bottom: 50px;
+				left: 50px;
+			}
+			
+			/* 摄像头视频元素 */
+			.camera-video {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 7px;
+				transition: all 0.3s ease;
+				/* 默认镜像效果 - 就像真正的镜子 */
+				transform: scaleX(-1);
+			}
+			
+			/* 取消镜像效果 */
+			.camera-video.no-mirror {
+				transform: scaleX(1);
+			}
+			
+			/* 控制按钮容器 - 只在hover时显示 */
+			.camera-controls {
+				position: absolute;
+				top: 5px;
+				right: 5px;
+				display: flex;
+				gap: 5px;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				pointer-events: none;
+			}
+			
+			/* 摄像头容器被hover时显示控制按钮 */
+			.camera-container:hover .camera-controls {
+				opacity: 1;
+				pointer-events: auto;
+			}
+			
+			/* 控制按钮样式 */
+			.control-btn {
+				width: 25px;
+				height: 25px;
+				background: rgba(0,0,0,0.7);
+				border: none;
+				border-radius: 50%;
+				color: white;
+				cursor: pointer;
+				font-size: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: all 0.2s;
+			}
+			
+			.control-btn:hover {
+				background: rgba(0,0,0,0.9);
+				transform: scale(1.1);
+			}
+			
+			/* 激活状态的按钮 */
+			.control-btn.active {
+				background: #4CAF50;
+			}
+			
+			/* 隐藏状态 */
+			.camera-container.hidden {
+				display: none;
+			}
+			
+			/* 启动摄像头的按钮 */
+			.start-camera-btn {
+				position: fixed;
+				bottom: 20px;
+				left: 20px;
+				padding: 10px 15px;
+				/* background: #4CAF50; */
+				/* color: white; */
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 1000;
+				font-size: 14px;
+				transition: background 0.3s;
+			}
+			
+			/* .start-camera-btn:hover {
+				background: #45a049;
+			} */
+			
+			.start-camera-btn.hidden {
+				display: none;
+			}
+			
+			/* 返回首页按钮 */
+			.back-home-btn {
+				position: fixed;
+				top: 20px;
+				left: 20px;
+				padding: 8px 12px;
+				background: rgba(0,0,0,0.7);
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 1001;
+				font-size: 14px;
+				text-decoration: none;
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				transition: all 0.3s ease;
+				backdrop-filter: blur(10px);
+			}
+			
+			.back-home-btn:hover {
+				background: rgba(0,0,0,0.9);
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- 返回首页按钮 -->
+		<a href="/ppt/index.html" class="back-home-btn">
+			🏠
+		</a>
+
+        	<!-- 启动摄像头按钮 -->
+		<button class="start-camera-btn" id="startCameraBtn">📷</button>
+		
+		<!-- 摄像头窗口 - 我们的魔法镜子 -->
+		<div class="camera-container hidden" id="cameraContainer">
+			<video class="camera-video" id="cameraVideo" autoplay muted></video>
+			<div class="camera-controls">
+				<button class="control-btn" id="enlargeBtn" title="放大/缩小">⛶</button>
+				<button class="control-btn active" id="mirrorBtn" title="取消镜像">🪞</button>
+				<button class="control-btn" id="closeBtn" title="关闭摄像头">✕</button>
+			</div>
+		</div>
+		
+		<div class="reveal">
+			<div class="slides"> 
+    <section>
+        <h2>⚙️ 后端是怎么工作的</h2>
+        <h3>深入理解后端路由和数据库的工作原理</h3>
+        <p>
+            <small>👨‍🏫 讲师：Nathan</small>
+        </p>
+    </section>
+
+    <section>
+        <section>
+            <h2>📋 回顾上节课</h2>
+        </section>
+        
+        <section>
+            <h3>✅ 我们已经学会了什么</h3>
+            <p>🔧 创建了一个最简单的后端接口</p>
+            <p>📤 可以返回我们想要的内容</p>
+        </section>
+
+        <section>
+            <h3>🤔 发现了什么问题？</h3>
+            <ul>
+                <li>📝 内容是直接写在代码里面的</li>
+                <li>🔢 只有一个接口</li>
+                <li>📄 实际项目不可能只有一篇文章</li>
+                <li>🔒 返回的内容不可能是固定的</li>
+            </ul>
+            <hr>
+            <p>❓ 那么怎么处理呢？</p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🆕 今天要学习的新概念</h2>
+        </section>
+        
+        <section>
+            <h3>📚 两个重要概念</h3>
+            <ul>
+                <li>🛣️ <strong>路由</strong></li>
+                <li>🗃️ <strong>数据库</strong></li>
+            </ul>
+            <hr>
+            <p>😱 终于我们提到数据库了</p>
+            <p>💪 也是很多人望而生畏的部分，但其实很简单！</p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h1>🛣️ 路由概念</h1>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🛣️ 什么是路由？</h2>
+        </section>
+        
+        <section>
+            <h3>🎯 路由很简单</h3>
+            <p>💡 不同的URL，我给你返回不同内容</p>
+            <p>🎯 这就是路由，特别简单！</p>
+        </section>
+
+        <section>
+            <h3>🌐 前端也有路由</h3>
+            <p>💭 如果大家还记得的话</p>
+            <p>🎯 前端的路由是自己处理的</p>
+            <p>📄 我们创建一个页面，就自动分配了一个路由</p>
+        </section>
+
+        <section>
+            <h3>❓ 怎么创建路由呢？</h3>
+            <p>🤔 很简单呀！</p>
+            <p>🔗 根据用户访问的不同URL</p>
+            <p>📤 给他返回或者分配到不同的功能</p>
+            <p>✅ 不就好了吗？</p>
+            <hr>
+            <p>🎯 对啊，这就是路由！</p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h1>🗃️ 数据库概念</h1>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🗃️ 什么是数据库？</h2>
+        </section>
+        
+        <section>
+            <h3>🌱 先做一个草根数据库</h3>
+            <p>💡 我们今天先不用专业的数据库</p>
+            <p>🛠️ 我们先来自己做一个草根数据库</p>
+        </section>
+
+        <section>
+            <h3>📁 创建文件夹结构</h3>
+            <p>📂 在当前目录下，创建一个文件夹</p>
+            <p>🏷️ 叫做 <strong>JSON</strong></p>
+            <p>📄 这个文件夹里面有一个一个的文件</p>
+            <p>📰 JSON文件里面，一个文件就是一篇文章</p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🔑 JSON文件格式</h2>
+        </section>
+        
+        <section>
+            <h3>📄 JSON文件的理解</h3>
+            <p>📋 大家把JSON文件理解为文档也行</p>
+            <p>📊 只不过里面的数据格式是特定的</p>
+            <hr>
+            <p>🔑 这种我们称之为 <strong>键值对</strong></p>
+        </section>
+
+        <section>
+            <h3>❓ 为什么要这样设计呢？</h3>
+            <p>🤔 大家想一想我们平时接收到的数据是什么样</p>
+        </section>
+
+        <section>
+            <h3>📊 键值对的例子</h3>
+            <p>✅ 一定是先有键再有值的，比方说：</p>
+            <ul>
+                <li>🎂 年龄：30</li>
+                <li>📏 身高：175</li>
+                <li>👤 性别：男</li>
+                <li>🏠 籍贯：北京</li>
+            </ul>
+            <hr>
+            <p>💡 我们接收到的数据大部分都是这样子</p>
+            <p>🔑 必须前面有键，后面有值</p>
+        </section>
+
+        <section>
+            <h3>⭐ JSON是最常见的数据格式</h3>
+            <p>🏆 这种JSON数据是我们做开发中</p>
+            <p>📊 使用的最最最常见的数据格式</p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📰 文章的JSON结构</h2>
+        </section>
+        
+        <section>
+            <h3>📝 对于一篇文章来说</h3>
+            <ul>
+                <li>📰 标题</li>
+                <li>📄 标题内容</li>
+                <li>📅 发表日期</li>
+                <li>👤 作者</li>
+                <li>📖 核心内容</li>
+            </ul>
+            <p>📚 还有很多这种信息</p>
+        </section>
+
+        <section>
+            <h3>💡 使用JSON格式很方便</h3>
+            <p>📂 使用这种文件格式来存放就显得很方便</p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🔍 数据库的本质</h2>
+        </section>
+        
+        <section>
+            <h3>🗂️ 数据库很简单</h3>
+            <p>💡 就是理解为一个文件夹</p>
+            <p>📄 里面存了很多种这样的键值对的JSON文件</p>
+        </section>
+
+        <section>
+            <h3>⚙️ 后端的重要任务</h3>
+            <p>🎯 根据用户请求的URL来判断</p>
+            <p>🤔 用户要获取哪部分内容：</p>
+            <ul>
+                <li>📂 整个文件夹？</li>
+                <li>📄 某个文件里面的内容？</li>
+                <li>📅 某一个时间之后的内容？</li>
+                <li>👤 作者为某个人的内容？</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>💻 这些都是代码需要处理的</h3>
+            <p>🎯 这就是我们平常所说的</p>
+            <p>⚙️ <strong>后端所做的工作</strong></p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>💡 理解了吗？</h2>
+        </section>
+        
+        <section>
+            <h3>😊 这样说，大家是不是非常容易理解？</h3>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📱 生活中的例子</h2>
+        </section>
+        
+        <section>
+            <h3>🤔 大家想象一下</h3>
+            <p>📱 平时大家在刷手机的时候主要在刷什么？</p>
+        </section>
+
+        <section>
+            <h3>📸 以小红书为例</h3>
+            <p>🔥 你刷的是什么？应该是：</p>
+            <ul>
+                <li>👀 浏览量最高的内容</li>
+                <li>❤️ 作者在你的关注列表里的人发表的内容</li>
+                <li>🆕 最新发表的内容</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>🎯 现在你明白了</h3>
+            <p>💡 知道了这个之后</p>
+            <p>🚀 你是不是就可以自己也写个后端？</p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🛠️ 实践环节</h2>
+        </section>
+        
+        <section>
+            <h3>💻 这堂课的代码我们就来完善一下</h3>
+            <ul>
+                <li>🛣️ 一方面加上路由</li>
+                <li>🔗 一方面把路由和数据库给接上</li>
+                <li>🌐 对我们的前端提供接口</li>
+            </ul>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📋 总结</h2>
+        </section>
+        
+        <section>
+            <h3>🎯 后端的核心工作</h3>
+            <ol>
+                <li>🛣️ <strong>路由</strong> - 根据不同URL返回不同内容</li>
+                <li>🗃️ <strong>数据库</strong> - 存储和管理数据</li>
+                <li>🔍 <strong>数据处理</strong> - 根据条件筛选和返回数据</li>
+            </ol>
+        </section>
+
+        <section>
+            <h3>💡 关键理解</h3>
+            <ul>
+                <li>🗂️ 数据库 = 文件夹 + JSON文件</li>
+                <li>🔑 JSON = 键值对数据格式</li>
+                <li>🛣️ 路由 = URL → 不同功能</li>
+                <li>🔍 后端 = 数据的智能管家</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>🚀 下一步</h3>
+            <p>💻 开始动手实践</p>
+            <p>🔧 完善我们的后端代码</p>
+            <p>🌐 为前端提供强大的数据支持</p>
+        </section>
+    </section>
+
+    <section>
+        <h2>🎉 谢谢大家！</h2>
+        <p>🏆 现在你们都理解后端的工作原理了！</p>
+        <p>💻 开始构建你的后端系统吧！</p>
+        <p>❓ 有问题随时提问！</p>
+    </section>
+    			</div>
+		</div>
+
+		<!-- 🔥 爆炸特效依赖库 - GSAP动画引擎 -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+		
+		<!-- 🔥 爆炸特效JavaScript库 - 零代码魔法属性系统 -->
+		<script src="../effect/explose/explosion-effects.js"></script>
+
+		<script src="../dist/reveal.js"></script>
+		<script src="../plugin/notes/notes.js"></script>
+		<script src="../plugin/markdown/markdown.js"></script>
+		<script src="../plugin/highlight/highlight.js"></script>
+		<script>
+		
+			// 摄像头相关的魔法函数们
+			let cameraStream = null; // 存储摄像头流，就像是我们的视频管道
+			let isEnlarged = false; // 记录是否已经放大
+			let isMirrored = true; // 记录是否镜像，默认开启
+			
+			// 启动摄像头的函数 - 就像打开一扇窗户
+			async function startCamera() {
+				try {
+					// 请求访问摄像头 - 礼貌地敲门
+					const stream = await navigator.mediaDevices.getUserMedia({
+						video: {
+							width: { ideal: 1280 },
+							height: { ideal: 720 }
+						},
+						audio: false // 我们只要视频，不要声音
+					});
+					
+					cameraStream = stream;
+					const video = document.getElementById('cameraVideo');
+					video.srcObject = stream;
+					
+					// 显示摄像头窗口，隐藏启动按钮
+					document.getElementById('cameraContainer').classList.remove('hidden');
+					document.getElementById('startCameraBtn').classList.add('hidden');
+					
+					console.log('摄像头启动成功！默认镜像模式，就像魔法一样～');
+				} catch (error) {
+					console.error('哎呀，摄像头启动失败了：', error);
+					alert('抱歉，无法访问摄像头。可能需要您允许网站使用摄像头权限哦！');
+				}
+			}
+			
+			// 关闭摄像头的函数 - 就像关闭窗户
+			function stopCamera() {
+				if (cameraStream) {
+					// 停止所有的视频轨道
+					cameraStream.getTracks().forEach(track => track.stop());
+					cameraStream = null;
+				}
+				
+				// 隐藏摄像头窗口，显示启动按钮
+				document.getElementById('cameraContainer').classList.add('hidden');
+				document.getElementById('startCameraBtn').classList.remove('hidden');
+				
+				// 重置所有状态
+				isEnlarged = false;
+				isMirrored = true; // 重置为默认镜像状态
+				document.getElementById('cameraContainer').classList.remove('enlarged');
+				document.getElementById('cameraVideo').classList.remove('no-mirror');
+				document.getElementById('mirrorBtn').classList.add('active');
+				document.getElementById('mirrorBtn').title = '取消镜像';
+				
+				console.log('摄像头已关闭，期待下次再见！');
+			}
+			
+			// 切换放大/缩小的函数 - 就像是变焦镜头
+			function toggleEnlarge() {
+				const container = document.getElementById('cameraContainer');
+				isEnlarged = !isEnlarged;
+				
+				if (isEnlarged) {
+					container.classList.add('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '缩小';
+				} else {
+					container.classList.remove('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '放大';
+				}
+			}
+			
+			// 切换镜像效果的函数 - 就像是翻转镜子
+			function toggleMirror() {
+				const video = document.getElementById('cameraVideo');
+				const mirrorBtn = document.getElementById('mirrorBtn');
+				isMirrored = !isMirrored;
+				
+				if (isMirrored) {
+					video.classList.remove('no-mirror');
+					mirrorBtn.classList.add('active');
+					mirrorBtn.title = '取消镜像';
+					console.log('镜像模式开启！现在就像照镜子一样自然～');
+				} else {
+					video.classList.add('no-mirror');
+					mirrorBtn.classList.remove('active');
+					mirrorBtn.title = '开启镜像';
+					console.log('镜像模式关闭！');
+				}
+			}
+			
+			// 绑定事件监听器 - 就像是给按钮装上开关
+			document.addEventListener('DOMContentLoaded', function() {
+				// 启动摄像头按钮
+				document.getElementById('startCameraBtn').addEventListener('click', startCamera);
+				
+				// 关闭按钮
+				document.getElementById('closeBtn').addEventListener('click', stopCamera);
+				
+				// 放大/缩小按钮
+				document.getElementById('enlargeBtn').addEventListener('click', toggleEnlarge);
+				
+				// 镜像按钮
+				document.getElementById('mirrorBtn').addEventListener('click', toggleMirror);
+			});
+			
+			// 页面关闭时清理摄像头资源 - 就像是整理房间
+			window.addEventListener('beforeunload', function() {
+				if (cameraStream) {
+					cameraStream.getTracks().forEach(track => track.stop());
+				}
+			});
+			
+			// 初始化reveal.js
+			Reveal.initialize({
+				hash: true,
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+			
+			
+		</script>
+	</body>
+</html> 

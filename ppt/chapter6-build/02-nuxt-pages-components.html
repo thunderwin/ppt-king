@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>第二课：Nuxt页面与组件实战 - AI全栈开发课程</title>
+		<meta name="description" content="前端开发的两大核心：页面与组件">
+
+		<link rel="stylesheet" href="../dist/reset.css">
+		<link rel="stylesheet" href="../dist/reveal.css">
+		<link rel="stylesheet" href="../dist/theme/sky.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+		
+		<!-- Font Awesome 图标库 -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<!-- 🔥 爆炸特效样式库 - 自动引入，让每个页面都有魔法！ -->
+		<link rel="stylesheet" href="../effect/explose/explosion-effects.css">
+        <!-- 自定义星星特效样式 -->
+		<style>
+		
+			
+		
+			
+		
+			
+			/* 让reveal.js的内容层级更高 */
+			.reveal {
+				position: relative;
+				z-index: 10;
+			}
+			
+			/* 摄像头窗口样式 - 我们的魔法镜子 */
+			.camera-container {
+				position: fixed;
+				bottom: 10px;
+				left: 10px;
+				width: 200px;
+				height: 150px;
+				background: #000;
+				border: 2px solid #333;
+				border-radius: 10px;
+				overflow: hidden;
+				z-index: 1000;
+				transition: all 0.3s ease;
+				box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+			}
+			
+			/* 放大状态的摄像头窗口 */
+			.camera-container.enlarged {
+				width: 400px;
+				height: 300px;
+				bottom: 50px;
+				left: 50px;
+			}
+			
+			/* 摄像头视频元素 */
+			.camera-video {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 7px;
+				transition: all 0.3s ease;
+				/* 默认镜像效果 - 就像真正的镜子 */
+				transform: scaleX(-1);
+			}
+			
+			/* 取消镜像效果 */
+			.camera-video.no-mirror {
+				transform: scaleX(1);
+			}
+			
+			/* 控制按钮容器 - 只在hover时显示 */
+			.camera-controls {
+				position: absolute;
+				top: 5px;
+				right: 5px;
+				display: flex;
+				gap: 5px;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				pointer-events: none;
+			}
+			
+			/* 摄像头容器被hover时显示控制按钮 */
+			.camera-container:hover .camera-controls {
+				opacity: 1;
+				pointer-events: auto;
+			}
+			
+			/* 控制按钮样式 */
+			.control-btn {
+				width: 25px;
+				height: 25px;
+				background: rgba(0,0,0,0.7);
+				border: none;
+				border-radius: 50%;
+				color: white;
+				cursor: pointer;
+				font-size: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: all 0.2s;
+			}
+			
+			.control-btn:hover {
+				background: rgba(0,0,0,0.9);
+				transform: scale(1.1);
+			}
+			
+			/* 激活状态的按钮 */
+			.control-btn.active {
+				background: #4CAF50;
+			}
+			
+			/* 隐藏状态 */
+			.camera-container.hidden {
+				display: none;
+			}
+			
+			/* 启动摄像头的按钮 */
+			.start-camera-btn {
+				position: fixed;
+				bottom: 20px;
+				left: 20px;
+				padding: 10px 15px;
+				/* background: #4CAF50; */
+				/* color: white; */
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 1000;
+				font-size: 14px;
+				transition: background 0.3s;
+			}
+			
+			/* .start-camera-btn:hover {
+				background: #45a049;
+			} */
+			
+			.start-camera-btn.hidden {
+				display: none;
+			}
+			
+			/* 返回首页按钮 */
+			.back-home-btn {
+				position: fixed;
+				top: 20px;
+				left: 20px;
+				padding: 8px 12px;
+				background: rgba(0,0,0,0.7);
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 1001;
+				font-size: 14px;
+				text-decoration: none;
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				transition: all 0.3s ease;
+				backdrop-filter: blur(10px);
+			}
+			
+			.back-home-btn:hover {
+				background: rgba(0,0,0,0.9);
+				transform: translateY(-2px);
+				box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- 返回首页按钮 -->
+		<a href="/ppt/index.html" class="back-home-btn">
+			🏠
+		</a>
+
+        	<!-- 启动摄像头按钮 -->
+		<button class="start-camera-btn" id="startCameraBtn">📷</button>
+		
+		<!-- 摄像头窗口 - 我们的魔法镜子 -->
+		<div class="camera-container hidden" id="cameraContainer">
+			<video class="camera-video" id="cameraVideo" autoplay muted></video>
+			<div class="camera-controls">
+				<button class="control-btn" id="enlargeBtn" title="放大/缩小">⛶</button>
+				<button class="control-btn active" id="mirrorBtn" title="取消镜像">🪞</button>
+				<button class="control-btn" id="closeBtn" title="关闭摄像头">✕</button>
+			</div>
+		</div>
+		
+		<div class="reveal">
+			<div class="slides"> 
+    <section>
+        <h2>Nuxt页面与组件实战</h2>
+        <h3>前端开发的两大核心元素</h3>
+        <p>
+            <small>讲师：Nathan</small>
+        </p>
+    </section>
+
+    <section>
+        <section>
+            <h2>🧩 前端的基本组成</h2>
+            <p>就像搭积木一样简单</p>
+            <div style="display: flex; justify-content: space-around; margin-top: 50px;">
+                <div class="fragment">
+                    <h3>📄 页面 (Pages)</h3>
+                    <p>网站的各个界面</p>
+                    <small>首页、关于我们、联系我们...</small>
+                </div>
+                <div class="fragment">
+                    <h3>🔧 组件 (Components)</h3>
+                    <p>可重复使用的部件</p>
+                    <small>导航栏、按钮、卡片...</small>
+                </div>
+            </div>
+            <p class="fragment" style="margin-top: 40px;">
+                <strong>💡 不管什么前端框架，都是这两个核心元素组成的！</strong>
+            </p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📁 Nuxt项目结构探索</h2>
+            <p>初来乍到，这些文件夹都是什么？</p>
+        </section>
+        
+        <section>
+            <h3>项目目录初印象</h3>
+            <div style="text-align: left;">
+                <p class="fragment">🤔 看到一堆陌生的文件夹？</p>
+                <p class="fragment">😅 作为新手，先别慌！</p>
+                <p class="fragment">📚 详细用途可以去官方网站查看</p>
+                <p class="fragment" style="color: #e74c3c;">
+                    <strong>🎯 我们只关注要做的东西！</strong>
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h3>创建核心文件夹</h3>
+            <p>在根目录创建两个重要文件夹</p>
+            <div style="display: flex; justify-content: space-around; margin-top: 40px;">
+                <div class="fragment">
+                    <h4>📁 pages</h4>
+                    <p>存放页面文件</p>
+                    <small>英文：页面的意思</small>
+                </div>
+                <div class="fragment">
+                    <h4>📁 components</h4>
+                    <p>存放组件文件</p>
+                    <small>英文：组件的意思</small>
+                </div>
+            </div>
+            <p class="fragment" style="margin-top: 30px;">
+                <small>💡 英文好的朋友看名字就知道了对不对！</small>
+            </p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>📄 创建我们的第一个页面</h2>
+            <p>让网站有内容可看</p>
+        </section>
+        
+        <section>
+            <h3>规划网站页面</h3>
+            <p>你希望你的网站有几个页面呢？</p>
+            <div class="fragment">
+                <h4>🏠 首页 (index.vue)</h4>
+                <p>网站的门面，第一印象很重要</p>
+            </div>
+            <div class="fragment">
+                <h4>📞 联系我们 (contact.vue)</h4>
+                <p>让访客能够联系到你</p>
+            </div>
+        </section>
+
+        <section>
+            <h3>实际操作步骤</h3>
+            <ol style="text-align: left;">
+                <li class="fragment">在 <code>pages</code> 文件夹下创建 <code>index.vue</code></li>
+                <li class="fragment">写一些简单的首页内容</li>
+                <li class="fragment">再创建 <code>contact.vue</code> 联系我们页面</li>
+                <li class="fragment">在浏览器中查看两个页面</li>
+            </ol>
+            <p class="fragment" style="color: #27ae60; margin-top: 30px;">
+                <strong>🎉 很好！是不是非常简单？我们已经有两个页面了！</strong>
+            </p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🤔 咦，少了点什么？</h2>
+            <p>经常使用网站的小朋友们都知道...</p>
+        </section>
+        
+        <section>
+            <h3>网站还缺什么？</h3>
+            <div style="text-align: left;">
+                <p class="fragment">🧭 <strong>导航栏</strong> - 帮助用户在页面间跳转</p>
+                <p class="fragment">🏷️ <strong>Logo</strong> - 品牌标识</p>
+                <p class="fragment">📋 <strong>菜单</strong> - 各个页面的链接</p>
+            </div>
+            <div class="fragment" style="margin-top: 40px;">
+                <h4>💭 这些应该属于什么呢？</h4>
+                <p class="fragment" style="color: #3498db;">
+                    <strong>💡 当然是组件！因为它们是重复使用的</strong>
+                </p>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🔧 创建导航组件</h2>
+            <p>让AI帮我们写个专业的导航</p>
+        </section>
+        
+        <section>
+            <h3>组件创建步骤</h3>
+            <ol style="text-align: left;">
+                <li class="fragment">在 <code>components</code> 文件夹下新建文件</li>
+                <li class="fragment">比如叫 <code>Header.vue</code> 或 <code>Navigation.vue</code></li>
+                <li class="fragment">让AI帮我们写导航代码</li>
+                <li class="fragment">包含到我们两个页面的链接</li>
+            </ol>
+            <p class="fragment" style="color: #f39c12; margin-top: 30px;">
+                <strong>🤖 AI写出来了！看起来很专业对吧？</strong>
+            </p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🔗 引入组件到页面</h2>
+            <p>最后一步：让组件出现在网站上</p>
+        </section>
+        
+        <section>
+            <h3>如何引入组件？</h3>
+            <p>在 <code>app.vue</code> 文件中引入我们的头部组件</p>
+            <div class="fragment" style="background: #2c3e50; color: white; padding: 20px; border-radius: 10px;">
+                <pre><code>
+&lt;template&gt;
+  &lt;Header /&gt;
+  &lt;NuxtPage /&gt;
+&lt;/template&gt;
+                </code></pre>
+            </div>
+            <p class="fragment" style="color: #27ae60; margin-top: 30px;">
+                <strong>🎉 然后就完事了，对就这么简单！</strong>
+            </p>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>🎯 总结回顾</h2>
+            <p>我们都学会了什么？</p>
+        </section>
+        
+        <section>
+            <h3>今天的成果</h3>
+            <ul style="text-align: left;">
+                <li class="fragment">📁 <strong>理解了项目结构</strong> - pages 和 components</li>
+                <li class="fragment">📄 <strong>创建了页面</strong> - 首页和联系我们页面</li>
+                <li class="fragment">🔧 <strong>制作了组件</strong> - 导航栏组件</li>
+                <li class="fragment">🔗 <strong>学会了引入</strong> - 在app.vue中使用组件</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>核心概念巩固</h3>
+            <div style="display: flex; justify-content: space-around;">
+                <div class="fragment">
+                    <h4>📄 页面 (Pages)</h4>
+                    <ul style="font-size: 0.8em;">
+                        <li>独立的网页界面</li>
+                        <li>用户可以直接访问</li>
+                        <li>有自己的URL路径</li>
+                    </ul>
+                </div>
+                <div class="fragment">
+                    <h4>🔧 组件 (Components)</h4>
+                    <ul style="font-size: 0.8em;">
+                        <li>可重复使用的部件</li>
+                        <li>在多个页面中使用</li>
+                        <li>提高代码复用性</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <h2>🚀 下一步</h2>
+        <p>继续完善我们的网站</p>
+        <ul>
+            <li class="fragment">🎨 美化页面样式</li>
+            <li class="fragment">➕ 添加更多页面</li>
+            <li class="fragment">🔧 创建更多有用的组件</li>
+            <li class="fragment">⚡ 添加交互功能</li>
+        </ul>
+        <p class="fragment" style="margin-top: 40px;">
+            <strong>记住：从简单开始，逐渐完善！</strong>
+        </p>
+    </section>
+    			</div>
+		</div>
+
+		<!-- 🔥 爆炸特效依赖库 - GSAP动画引擎 -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+		
+		<!-- 🔥 爆炸特效JavaScript库 - 零代码魔法属性系统 -->
+		<script src="../effect/explose/explosion-effects.js"></script>
+
+		<script src="../dist/reveal.js"></script>
+		<script src="../plugin/notes/notes.js"></script>
+		<script src="../plugin/markdown/markdown.js"></script>
+		<script src="../plugin/highlight/highlight.js"></script>
+		<script>
+		
+			// 摄像头相关的魔法函数们
+			let cameraStream = null; // 存储摄像头流，就像是我们的视频管道
+			let isEnlarged = false; // 记录是否已经放大
+			let isMirrored = true; // 记录是否镜像，默认开启
+			
+			// 启动摄像头的函数 - 就像打开一扇窗户
+			async function startCamera() {
+				try {
+					// 请求访问摄像头 - 礼貌地敲门
+					const stream = await navigator.mediaDevices.getUserMedia({
+						video: {
+							width: { ideal: 1280 },
+							height: { ideal: 720 }
+						},
+						audio: false // 我们只要视频，不要声音
+					});
+					
+					cameraStream = stream;
+					const video = document.getElementById('cameraVideo');
+					video.srcObject = stream;
+					
+					// 显示摄像头窗口，隐藏启动按钮
+					document.getElementById('cameraContainer').classList.remove('hidden');
+					document.getElementById('startCameraBtn').classList.add('hidden');
+					
+					console.log('摄像头启动成功！默认镜像模式，就像魔法一样～');
+				} catch (error) {
+					console.error('哎呀，摄像头启动失败了：', error);
+					alert('抱歉，无法访问摄像头。可能需要您允许网站使用摄像头权限哦！');
+				}
+			}
+			
+			// 关闭摄像头的函数 - 就像关闭窗户
+			function stopCamera() {
+				if (cameraStream) {
+					// 停止所有的视频轨道
+					cameraStream.getTracks().forEach(track => track.stop());
+					cameraStream = null;
+				}
+				
+				// 隐藏摄像头窗口，显示启动按钮
+				document.getElementById('cameraContainer').classList.add('hidden');
+				document.getElementById('startCameraBtn').classList.remove('hidden');
+				
+				// 重置所有状态
+				isEnlarged = false;
+				isMirrored = true; // 重置为默认镜像状态
+				document.getElementById('cameraContainer').classList.remove('enlarged');
+				document.getElementById('cameraVideo').classList.remove('no-mirror');
+				document.getElementById('mirrorBtn').classList.add('active');
+				document.getElementById('mirrorBtn').title = '取消镜像';
+				
+				console.log('摄像头已关闭，期待下次再见！');
+			}
+			
+			// 切换放大/缩小的函数 - 就像是变焦镜头
+			function toggleEnlarge() {
+				const container = document.getElementById('cameraContainer');
+				isEnlarged = !isEnlarged;
+				
+				if (isEnlarged) {
+					container.classList.add('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '缩小';
+				} else {
+					container.classList.remove('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '放大';
+				}
+			}
+			
+			// 切换镜像效果的函数 - 就像是翻转镜子
+			function toggleMirror() {
+				const video = document.getElementById('cameraVideo');
+				const mirrorBtn = document.getElementById('mirrorBtn');
+				isMirrored = !isMirrored;
+				
+				if (isMirrored) {
+					video.classList.remove('no-mirror');
+					mirrorBtn.classList.add('active');
+					mirrorBtn.title = '取消镜像';
+					console.log('镜像模式开启！现在就像照镜子一样自然～');
+				} else {
+					video.classList.add('no-mirror');
+					mirrorBtn.classList.remove('active');
+					mirrorBtn.title = '开启镜像';
+					console.log('镜像模式关闭！');
+				}
+			}
+			
+			// 绑定事件监听器 - 就像是给按钮装上开关
+			document.addEventListener('DOMContentLoaded', function() {
+				// 启动摄像头按钮
+				document.getElementById('startCameraBtn').addEventListener('click', startCamera);
+				
+				// 关闭按钮
+				document.getElementById('closeBtn').addEventListener('click', stopCamera);
+				
+				// 放大/缩小按钮
+				document.getElementById('enlargeBtn').addEventListener('click', toggleEnlarge);
+				
+				// 镜像按钮
+				document.getElementById('mirrorBtn').addEventListener('click', toggleMirror);
+			});
+			
+			// 页面关闭时清理摄像头资源 - 就像是整理房间
+			window.addEventListener('beforeunload', function() {
+				if (cameraStream) {
+					cameraStream.getTracks().forEach(track => track.stop());
+				}
+			});
+			
+			// 初始化reveal.js
+			Reveal.initialize({
+				hash: true,
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+			
+			
+		</script>
+	</body>
+</html> 

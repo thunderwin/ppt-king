@@ -1,0 +1,137 @@
+			</div>
+		</div>
+
+		<!-- 🔥 爆炸特效依赖库 - GSAP动画引擎 -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+		
+		<!-- 🔥 爆炸特效JavaScript库 - 零代码魔法属性系统 -->
+		<script src="../effect/explose/explosion-effects.js"></script>
+
+		<script src="../dist/reveal.js"></script>
+		<script src="../plugin/notes/notes.js"></script>
+		<script src="../plugin/markdown/markdown.js"></script>
+		<script src="../plugin/highlight/highlight.js"></script>
+		<script>
+		
+			// 摄像头相关的魔法函数们
+			let cameraStream = null; // 存储摄像头流，就像是我们的视频管道
+			let isEnlarged = false; // 记录是否已经放大
+			let isMirrored = true; // 记录是否镜像，默认开启
+			
+			// 启动摄像头的函数 - 就像打开一扇窗户
+			async function startCamera() {
+				try {
+					// 请求访问摄像头 - 礼貌地敲门
+					const stream = await navigator.mediaDevices.getUserMedia({
+						video: {
+							width: { ideal: 1280 },
+							height: { ideal: 720 }
+						},
+						audio: false // 我们只要视频，不要声音
+					});
+					
+					cameraStream = stream;
+					const video = document.getElementById('cameraVideo');
+					video.srcObject = stream;
+					
+					// 显示摄像头窗口，隐藏启动按钮
+					document.getElementById('cameraContainer').classList.remove('hidden');
+					document.getElementById('startCameraBtn').classList.add('hidden');
+					
+					console.log('摄像头启动成功！默认镜像模式，就像魔法一样～');
+				} catch (error) {
+					console.error('哎呀，摄像头启动失败了：', error);
+					alert('抱歉，无法访问摄像头。可能需要您允许网站使用摄像头权限哦！');
+				}
+			}
+			
+			// 关闭摄像头的函数 - 就像关闭窗户
+			function stopCamera() {
+				if (cameraStream) {
+					// 停止所有的视频轨道
+					cameraStream.getTracks().forEach(track => track.stop());
+					cameraStream = null;
+				}
+				
+				// 隐藏摄像头窗口，显示启动按钮
+				document.getElementById('cameraContainer').classList.add('hidden');
+				document.getElementById('startCameraBtn').classList.remove('hidden');
+				
+				// 重置所有状态
+				isEnlarged = false;
+				isMirrored = true; // 重置为默认镜像状态
+				document.getElementById('cameraContainer').classList.remove('enlarged');
+				document.getElementById('cameraVideo').classList.remove('no-mirror');
+				document.getElementById('mirrorBtn').classList.add('active');
+				document.getElementById('mirrorBtn').title = '取消镜像';
+				
+				console.log('摄像头已关闭，期待下次再见！');
+			}
+			
+			// 切换放大/缩小的函数 - 就像是变焦镜头
+			function toggleEnlarge() {
+				const container = document.getElementById('cameraContainer');
+				isEnlarged = !isEnlarged;
+				
+				if (isEnlarged) {
+					container.classList.add('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '缩小';
+				} else {
+					container.classList.remove('enlarged');
+					document.getElementById('enlargeBtn').textContent = '⛶';
+					document.getElementById('enlargeBtn').title = '放大';
+				}
+			}
+			
+			// 切换镜像效果的函数 - 就像是翻转镜子
+			function toggleMirror() {
+				const video = document.getElementById('cameraVideo');
+				const mirrorBtn = document.getElementById('mirrorBtn');
+				isMirrored = !isMirrored;
+				
+				if (isMirrored) {
+					video.classList.remove('no-mirror');
+					mirrorBtn.classList.add('active');
+					mirrorBtn.title = '取消镜像';
+					console.log('镜像模式开启！现在就像照镜子一样自然～');
+				} else {
+					video.classList.add('no-mirror');
+					mirrorBtn.classList.remove('active');
+					mirrorBtn.title = '开启镜像';
+					console.log('镜像模式关闭！');
+				}
+			}
+			
+			// 绑定事件监听器 - 就像是给按钮装上开关
+			document.addEventListener('DOMContentLoaded', function() {
+				// 启动摄像头按钮
+				document.getElementById('startCameraBtn').addEventListener('click', startCamera);
+				
+				// 关闭按钮
+				document.getElementById('closeBtn').addEventListener('click', stopCamera);
+				
+				// 放大/缩小按钮
+				document.getElementById('enlargeBtn').addEventListener('click', toggleEnlarge);
+				
+				// 镜像按钮
+				document.getElementById('mirrorBtn').addEventListener('click', toggleMirror);
+			});
+			
+			// 页面关闭时清理摄像头资源 - 就像是整理房间
+			window.addEventListener('beforeunload', function() {
+				if (cameraStream) {
+					cameraStream.getTracks().forEach(track => track.stop());
+				}
+			});
+			
+			// 初始化reveal.js
+			Reveal.initialize({
+				hash: true,
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+			
+			
+		</script>
+	</body>
+</html> 

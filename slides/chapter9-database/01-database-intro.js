@@ -1,0 +1,568 @@
+module.exports = {
+    title: '数据库入门',
+    description: '从古代竹简到现代数据库的演进历程',
+    theme: 'sky',
+    content: `
+    <section>
+        <h2>数据库入门</h2>
+        <h3>从古代竹简到现代数据库</h3>
+        <ul>
+            <li>📚 什么是数据库</li>
+            <li>📜 数据存储的历史</li>
+            <li>🏛️ 甲骨文公司的传奇故事</li>
+            <li>🐘 PostgreSQL的魅力</li>
+            <li>🤔 为什么需要数据库</li>
+        </ul>
+        <p>
+            <small>讲师：Nathan</small>
+        </p>
+    </section>
+
+    <section>
+        <section>
+            <h2>什么是数据库？</h2>
+            <p>数据库就像一个超级智能的图书馆</p>
+            <ul>
+                <li>📚 <strong>图书馆</strong> - 存放大量书籍</li>
+                <li>🗂️ <strong>数据库</strong> - 存放大量数据</li>
+                <li>👨‍💼 <strong>图书管理员</strong> - 帮你快速找到需要的书</li>
+                <li>🤖 <strong>数据库管理系统</strong> - 帮你快速找到需要的数据</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>生活中的"数据库"</h3>
+            <p>其实你每天都在使用各种"数据库"</p>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="width: 30%;">
+                    <h4>📱 手机通讯录</h4>
+                    <ul>
+                        <li>存储联系人信息</li>
+                        <li>按姓名搜索</li>
+                        <li>分组管理</li>
+                    </ul>
+                </div>
+                <div style="width: 30%;">
+                    <h4>🏪 超市商品</h4>
+                    <ul>
+                        <li>商品信息管理</li>
+                        <li>价格查询</li>
+                        <li>库存统计</li>
+                    </ul>
+                </div>
+                <div style="width: 30%;">
+                    <h4>🏦 银行系统</h4>
+                    <ul>
+                        <li>账户信息</li>
+                        <li>交易记录</li>
+                        <li>余额查询</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h3>数据库 vs 普通文件</h3>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="width: 45%;">
+                    <h4>📄 普通文件</h4>
+                    <p>就像把所有纸张堆在一起</p>
+                    <ul>
+                        <li>查找困难</li>
+                        <li>容易丢失</li>
+                        <li>难以整理</li>
+                        <li>无法同时使用</li>
+                    </ul>
+                </div>
+                <div style="width: 45%;">
+                    <h4>🗄️ 数据库</h4>
+                    <p>就像现代化的档案管理系统</p>
+                    <ul>
+                        <li>快速查找</li>
+                        <li>安全可靠</li>
+                        <li>自动整理</li>
+                        <li>多人同时使用</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>数据存储的历史演进</h2>
+            <p>人类记录信息的方式在不断进化</p>
+            <ul>
+                <li>🪨 <strong>石器时代</strong> - 在石头上刻字</li>
+                <li>📜 <strong>古代</strong> - 竹简、羊皮纸</li>
+                <li>📚 <strong>近代</strong> - 纸质档案柜</li>
+                <li>💻 <strong>现代</strong> - 电子数据库</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>古代的数据管理</h3>
+            <div style="text-align: left;">
+                <h4>📜 中国古代：</h4>
+                <ul>
+                    <li><strong>竹简</strong> - 把文字刻在竹片上</li>
+                    <li><strong>册书</strong> - 用绳子把竹简串起来</li>
+                    <li><strong>档案库</strong> - 皇宫里的藏书阁</li>
+                    <li><strong>管理员</strong> - 专门的史官负责管理</li>
+                </ul>
+                
+                <h4>🏛️ 古埃及：</h4>
+                <ul>
+                    <li><strong>象形文字</strong> - 刻在石头上</li>
+                    <li><strong>莎草纸</strong> - 相当于古代的纸张</li>
+                    <li><strong>图书馆</strong> - 亚历山大图书馆</li>
+                </ul>
+                
+                <h4>💡 共同点：</h4>
+                <p>都需要<strong>存储、组织、检索</strong>信息，这就是数据库的雏形！</p>
+            </div>
+        </section>
+        
+        <section>
+            <h3>工业时代的文件柜</h3>
+            <p>19-20世纪的办公室革命</p>
+            <div style="text-align: left;">
+                <h4>🗄️ 文件柜系统：</h4>
+                <ul>
+                    <li><strong>分类存储</strong> - A-Z字母排序</li>
+                    <li><strong>标签系统</strong> - 每个文件夹都有标签</li>
+                    <li><strong>索引卡片</strong> - 快速查找目录</li>
+                    <li><strong>专人管理</strong> - 文书、秘书负责</li>
+                </ul>
+                
+                <h4>😅 存在的问题：</h4>
+                <ul>
+                    <li>查找速度慢</li>
+                    <li>占用空间大</li>
+                    <li>容易损坏丢失</li>
+                    <li>难以备份</li>
+                    <li>无法远程访问</li>
+                </ul>
+                
+                <h4>💭 人们开始想：</h4>
+                <p>"如果有一种神奇的文件柜，能瞬间找到任何信息就好了..."</p>
+            </div>
+        </section>
+        
+        <section>
+            <h3>计算机时代的到来</h3>
+            <div style="text-align: left;">
+                <h4>💻 1960年代 - 第一代数据库：</h4>
+                <ul>
+                    <li><strong>磁带存储</strong> - 像录音带一样</li>
+                    <li><strong>顺序访问</strong> - 必须从头开始找</li>
+                    <li><strong>大型机</strong> - 房间那么大的计算机</li>
+                </ul>
+                
+                <h4>💾 1970年代 - 关系型数据库：</h4>
+                <ul>
+                    <li><strong>表格形式</strong> - 像Excel表格</li>
+                    <li><strong>随机访问</strong> - 可以直接跳到任何位置</li>
+                    <li><strong>SQL语言</strong> - 专门查询数据的语言</li>
+                </ul>
+                
+                <h4>🌐 1990年代至今 - 现代数据库：</h4>
+                <ul>
+                    <li>互联网数据库</li>
+                    <li>云端数据库</li>
+                    <li>大数据处理</li>
+                    <li>人工智能数据库</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>甲骨文公司的传奇故事</h2>
+            <p>从小公司到数据库巨头的创业传奇</p>
+            <ul>
+                <li>👨‍💻 <strong>创始人</strong> - 拉里·埃里森的故事</li>
+                <li>📊 <strong>第一个商业数据库</strong> - Oracle的诞生</li>
+                <li>💰 <strong>商业帝国</strong> - 如何成为行业霸主</li>
+                <li>🎯 <strong>营销天才</strong> - "永不停机"的承诺</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>拉里·埃里森 - 硅谷狂人</h3>
+            <div style="text-align: left;">
+                <h4>👶 早年经历：</h4>
+                <ul>
+                    <li>1944年生于纽约布朗克斯</li>
+                    <li>被姨妈姨夫收养</li>
+                    <li>大学辍学，被称为"失败者"</li>
+                    <li>多次创业失败</li>
+                </ul>
+                
+                <h4>💡 转折点（1977年）：</h4>
+                <ul>
+                    <li>在IBM工作时看到一篇论文</li>
+                    <li>论文描述了"关系型数据库"概念</li>
+                    <li>意识到这是未来的方向</li>
+                    <li>决定创建商业版本</li>
+                </ul>
+                
+                <h4>🚀 创业故事：</h4>
+                <ul>
+                    <li>1977年创立SDL（后改名Oracle）</li>
+                    <li>只有3个人，2000美元启动资金</li>
+                    <li>在车库里开始编程</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>Oracle数据库的诞生</h3>
+            <div style="text-align: left;">
+                <h4>🎯 聪明的策略：</h4>
+                <ul>
+                    <li><strong>抢先IBM</strong> - IBM发明了概念但没产品</li>
+                    <li><strong>起名Oracle</strong> - "神谕"，暗示能预知一切</li>
+                    <li><strong>兼容性</strong> - 可以在不同计算机上运行</li>
+                    <li><strong>标准SQL</strong> - 使用通用查询语言</li>
+                </ul>
+                
+                <h4>📈 快速发展：</h4>
+                <ul>
+                    <li>1979年 - 推出Oracle V2（故意跳过V1）</li>
+                    <li>1982年 - 公司改名为Oracle</li>
+                    <li>1986年 - 上市，市值3.5亿美元</li>
+                    <li>1990年代 - 成为数据库市场老大</li>
+                </ul>
+                
+                <h4>😄 有趣的事实：</h4>
+                <ul>
+                    <li>为什么叫"甲骨文"？因为Oracle在中国的中文名</li>
+                    <li>拉里·埃里森买了整个夏威夷岛屿</li>
+                    <li>他的游艇比很多人的房子还大</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>埃里森的经典语录</h3>
+            <div style="text-align: left;">
+                <h4>💬 关于竞争：</h4>
+                <blockquote style="font-style: italic; border-left: 3px solid #3498db; padding-left: 20px;">
+                    "我们的目标不是成为第一，而是成为唯一。"
+                </blockquote>
+                
+                <h4>💬 关于创新：</h4>
+                <blockquote style="font-style: italic; border-left: 3px solid #3498db; padding-left: 20px;">
+                    "当所有人都往东走的时候，我会往西走。"
+                </blockquote>
+                
+                <h4>💬 关于成功：</h4>
+                <blockquote style="font-style: italic; border-left: 3px solid #3498db; padding-left: 20px;">
+                    "我从来不害怕失败，我只害怕不去尝试。"
+                </blockquote>
+                
+                <h4>😂 搞笑的是：</h4>
+                <p>他曾经说："我比比尔·盖茨更帅，这就是我的竞争优势！"</p>
+            </div>
+        </section>
+        
+        <section>
+            <h3>Oracle的商业策略</h3>
+            <div style="text-align: left;">
+                <h4>🎯 "永不停机"营销：</h4>
+                <ul>
+                    <li>承诺数据库99.99%可用性</li>
+                    <li>一年只能停机52分钟</li>
+                    <li>这在当时是革命性的承诺</li>
+                </ul>
+                
+                <h4>💰 疯狂的定价策略：</h4>
+                <ul>
+                    <li>按CPU收费 - 一个CPU几万美元</li>
+                    <li>按用户数收费</li>
+                    <li>各种附加服务费</li>
+                    <li>客户经常被"天价"账单吓到</li>
+                </ul>
+                
+                <h4>🤝 收购狂人：</h4>
+                <ul>
+                    <li>收购了130多家公司</li>
+                    <li>PeopleSoft - 103亿美元</li>
+                    <li>Siebel - 58亿美元</li>
+                    <li>Sun Microsystems - 74亿美元</li>
+                </ul>
+                
+                <h4>😅 结果：</h4>
+                <p>Oracle成为企业软件巨头，埃里森成为世界富豪榜常客！</p>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>PostgreSQL - 开源数据库之王</h2>
+            <p>学术界的骄傲，开发者的最爱</p>
+            <ul>
+                <li>🎓 <strong>学术出身</strong> - 加州大学伯克利分校</li>
+                <li>🆓 <strong>完全免费</strong> - 开源软件的典范</li>
+                <li>🔬 <strong>技术先进</strong> - 很多创新功能</li>
+                <li>🐘 <strong>可爱吉祥物</strong> - 为什么是大象？</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>PostgreSQL的诞生故事</h3>
+            <div style="text-align: left;">
+                <h4>🎓 学术背景（1970年代）：</h4>
+                <ul>
+                    <li><strong>加州大学伯克利分校</strong> - 计算机科学圣地</li>
+                    <li><strong>Michael Stonebraker教授</strong> - 数据库领域大牛</li>
+                    <li><strong>研究项目</strong> - 探索数据库新技术</li>
+                    <li><strong>学生参与</strong> - 培养下一代专家</li>
+                </ul>
+                
+                <h4>📚 发展历程：</h4>
+                <ul>
+                    <li><strong>1977-1985</strong> - Ingres项目</li>
+                    <li><strong>1986-1994</strong> - Postgres项目（Post Ingres）</li>
+                    <li><strong>1995</strong> - 添加SQL支持，改名PostgreSQL</li>
+                    <li><strong>1996至今</strong> - 全球开源社区维护</li>
+                </ul>
+                
+                <h4>💡 设计理念：</h4>
+                <ul>
+                    <li>学术严谨性 + 实用性</li>
+                    <li>先进技术的试验田</li>
+                    <li>开放标准，不被商业利益绑架</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>为什么叫PostgreSQL？</h3>
+            <div style="text-align: left;">
+                <h4>🤔 名字的由来：</h4>
+                <ul>
+                    <li><strong>Post</strong> - "之后"的意思</li>
+                    <li><strong>Ingres</strong> - 前一个项目的名字</li>
+                    <li><strong>SQL</strong> - 支持标准SQL语言</li>
+                    <li><strong>合起来</strong> - "Ingres之后的SQL数据库"</li>
+                </ul>
+                
+                <h4>🐘 为什么吉祥物是大象？</h4>
+                <ul>
+                    <li><strong>记忆力好</strong> - 大象永远不会忘记数据</li>
+                    <li><strong>稳重可靠</strong> - 像数据库一样稳定</li>
+                    <li><strong>力量强大</strong> - 能处理大数据</li>
+                    <li><strong>温和友善</strong> - 对开发者友好</li>
+                </ul>
+                
+                <h4>😊 昵称：</h4>
+                <ul>
+                    <li>Postgres（简称）</li>
+                    <li>PostGIS（地理扩展版本）</li>
+                    <li>大象数据库</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>PostgreSQL vs Oracle</h3>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9em;">
+                <div style="width: 45%;">
+                    <h4>💰 Oracle</h4>
+                    <ul>
+                        <li><strong>价格</strong>：天价</li>
+                        <li><strong>支持</strong>：专业但昂贵</li>
+                        <li><strong>性能</strong>：企业级优化</li>
+                        <li><strong>功能</strong>：商业功能丰富</li>
+                        <li><strong>适合</strong>：大企业</li>
+                    </ul>
+                </div>
+                <div style="width: 45%;">
+                    <h4>🆓 PostgreSQL</h4>
+                    <ul>
+                        <li><strong>价格</strong>：完全免费</li>
+                        <li><strong>支持</strong>：社区支持</li>
+                        <li><strong>性能</strong>：不断优化</li>
+                        <li><strong>功能</strong>：开源创新</li>
+                        <li><strong>适合</strong>：各种规模</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h4 style="margin-top: 30px;">🎯 选择建议：</h4>
+            <ul>
+                <li><strong>小公司/初创企业</strong> - PostgreSQL，省钱又好用</li>
+                <li><strong>大企业</strong> - 看预算，Oracle功能多但贵</li>
+                <li><strong>学习用途</strong> - PostgreSQL，免费且功能强大</li>
+                <li><strong>个人项目</strong> - PostgreSQL，绝对首选</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>PostgreSQL的独特功能</h3>
+            <div style="text-align: left;">
+                <h4>🚀 先进特性：</h4>
+                <ul>
+                    <li><strong>JSON支持</strong> - 可以存储和查询JSON数据</li>
+                    <li><strong>数组类型</strong> - 一个字段可以存多个值</li>
+                    <li><strong>自定义类型</strong> - 可以创建自己的数据类型</li>
+                    <li><strong>全文搜索</strong> - 内置搜索引擎</li>
+                    <li><strong>地理信息</strong> - PostGIS扩展支持地图数据</li>
+                </ul>
+                
+                <h4>💡 创新功能：</h4>
+                <ul>
+                    <li><strong>表继承</strong> - 表之间可以有父子关系</li>
+                    <li><strong>规则系统</strong> - 可以自定义数据处理规则</li>
+                    <li><strong>触发器</strong> - 数据变化时自动执行操作</li>
+                    <li><strong>视图</strong> - 虚拟表，动态生成数据</li>
+                </ul>
+                
+                <h4>🎓 学术价值：</h4>
+                <ul>
+                    <li>很多博士论文都基于PostgreSQL</li>
+                    <li>数据库新技术的试验平台</li>
+                    <li>影响了整个数据库行业</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>为什么我们需要数据库？</h2>
+            <p>现代生活离不开数据库</p>
+            <ul>
+                <li>📱 <strong>移动应用</strong> - 微信、支付宝、抖音</li>
+                <li>🛒 <strong>电商网站</strong> - 淘宝、京东、亚马逊</li>
+                <li>🎵 <strong>娱乐平台</strong> - 网易云音乐、爱奇艺</li>
+                <li>🏦 <strong>金融服务</strong> - 银行、证券、保险</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>数据库在生活中的应用</h3>
+            <div style="text-align: left; font-size: 0.9em;">
+                <h4>📱 当你用微信时：</h4>
+                <ul>
+                    <li>好友列表存在数据库里</li>
+                    <li>聊天记录保存在数据库里</li>
+                    <li>朋友圈内容存在数据库里</li>
+                    <li>支付记录存在数据库里</li>
+                </ul>
+                
+                <h4>🛒 当你网购时：</h4>
+                <ul>
+                    <li>商品信息从数据库读取</li>
+                    <li>库存数量实时更新</li>
+                    <li>订单信息保存到数据库</li>
+                    <li>物流信息跟踪记录</li>
+                </ul>
+                
+                <h4>🎵 当你听音乐时：</h4>
+                <ul>
+                    <li>歌曲库存储在数据库</li>
+                    <li>播放历史记录</li>
+                    <li>个人喜好分析</li>
+                    <li>推荐算法计算</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section>
+            <h3>没有数据库的世界</h3>
+            <div style="text-align: left;">
+                <h4>😱 想象一下：</h4>
+                <ul>
+                    <li><strong>每次开机</strong> - 都要重新输入所有联系人</li>
+                    <li><strong>网购</strong> - 无法保存购物车，无法查看历史订单</li>
+                    <li><strong>社交</strong> - 无法保存聊天记录，无法查看朋友动态</li>
+                    <li><strong>银行</strong> - 无法查询余额，无法转账</li>
+                    <li><strong>学习</strong> - 无法保存学习进度，无法查看成绩</li>
+                </ul>
+                
+                <h4>🤯 结果：</h4>
+                <ul>
+                    <li>现代生活完全无法运转</li>
+                    <li>回到石器时代的信息管理</li>
+                    <li>互联网失去意义</li>
+                    <li>数字化社会崩塌</li>
+                </ul>
+                
+                <h4>💡 所以：</h4>
+                <p><strong>数据库是现代社会的基础设施，就像水电一样重要！</strong></p>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <section>
+            <h2>数据库的类型</h2>
+            <p>不同需求，不同选择</p>
+            <ul>
+                <li>📊 <strong>关系型数据库</strong> - MySQL, PostgreSQL, Oracle</li>
+                <li>📄 <strong>文档数据库</strong> - MongoDB, CouchDB</li>
+                <li>🔑 <strong>键值数据库</strong> - Redis, DynamoDB</li>
+                <li>📈 <strong>图数据库</strong> - Neo4j, Amazon Neptune</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h3>选择数据库的考虑因素</h3>
+            <div style="text-align: left;">
+                <h4>💰 成本考虑：</h4>
+                <ul>
+                    <li><strong>免费开源</strong> - MySQL, PostgreSQL</li>
+                    <li><strong>商业授权</strong> - Oracle, SQL Server</li>
+                    <li><strong>云服务</strong> - AWS RDS, 阿里云RDS</li>
+                </ul>
+                
+                <h4>📊 数据规模：</h4>
+                <ul>
+                    <li><strong>小型项目</strong> - SQLite, MySQL</li>
+                    <li><strong>中型项目</strong> - PostgreSQL, SQL Server</li>
+                    <li><strong>大型项目</strong> - Oracle, 分布式数据库</li>
+                </ul>
+                
+                <h4>👥 团队技能：</h4>
+                <ul>
+                    <li>团队熟悉什么数据库</li>
+                    <li>学习成本考虑</li>
+                    <li>社区支持程度</li>
+                </ul>
+                
+                <h4>🎯 项目需求：</h4>
+                <ul>
+                    <li>数据类型（结构化 vs 非结构化）</li>
+                    <li>性能要求</li>
+                    <li>安全性要求</li>
+                    <li>扩展性需求</li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+    <section>
+        <h2>课程总结</h2>
+        <div style="text-align: left;">
+            <h3>今天我们了解了：</h3>
+            <ul>
+                <li>📚 <strong>数据库概念</strong> - 现代化的信息管理系统</li>
+                <li>📜 <strong>历史演进</strong> - 从竹简到电子数据库的发展</li>
+                <li>🏛️ <strong>Oracle传奇</strong> - 拉里·埃里森的创业故事</li>
+                <li>🐘 <strong>PostgreSQL</strong> - 学术界的开源骄傲</li>
+                <li>🌍 <strong>现实应用</strong> - 数据库在生活中无处不在</li>
+                <li>🎯 <strong>选择策略</strong> - 如何选择合适的数据库</li>
+            </ul>
+            <p style="margin-top: 30px;">
+                <em>🎉 恭喜！你现在对数据库有了全面的认识！</em>
+            </p>
+        </div>
+    </section>
+    `
+};
+
